@@ -1,0 +1,62 @@
+.testimoni-hero {
+    height: 40vh;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+    url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+.testimoni-hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+}
+
+.testimoni-section {
+    padding: 5rem 3rem;
+    background: #111;
+    color: white;
+}
+
+.testimoni-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.testimoni-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.testimoni-card {
+    background: #1a1a1a;
+    padding: 2rem;
+    border-radius: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimoni-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+.testimoni-card p {
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+}
+
+.customer strong {
+    color: #ffd700;
+}
+
+.customer span {
+    display: block;
+    font-size: 0.85rem;
+    opacity: 0.7;
+}

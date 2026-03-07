@@ -1,0 +1,268 @@
+/* home.css */
+.home-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Swiper Carousel */
+.home-swiper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.home-swiper .swiper-slide {
+    position: relative;
+    overflow: hidden;
+}
+
+.home-swiper .swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.1);
+    transition: transform 8s ease;
+}
+
+.home-swiper .swiper-slide-active img {
+    transform: scale(1);
+}
+
+/* Overlay */
+.home-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.8) 0%,
+        rgba(0, 0, 0, 0.5) 50%,
+        rgba(0, 0, 0, 0.3) 100%
+    );
+    z-index: 2;
+}
+
+/* Content Container */
+.home-content {
+    position: relative;
+    z-index: 10;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 4rem;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+}
+
+/* Store Name - Kiri */
+.home-store-name {
+    flex: 1;
+    animation: fadeInLeft 1s ease;
+}
+
+.home-store-name h1 {
+    font-size: 5.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0;
+    text-shadow: 2px 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.home-store-name .subtitle {
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-top: 1rem;
+    opacity: 0.9;
+    letter-spacing: 2px;
+}
+
+.home-store-name span {
+    background: linear-gradient(135deg, #ffd700, #ff6b6b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* Order Button - Kanan */
+.home-order-btn {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    animation: fadeInRight 1s ease;
+}
+
+.home-order-now-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    /* background: rgba(255, 215, 0, 0.2); */
+    /* backdrop-filter: blur(10px); */
+    color: white;
+    text-decoration: none;
+    padding: 1.5rem 3.5rem;
+    border-radius: 80px;
+    font-weight: 700;
+    font-size: 1.8rem;
+    /* border: 2px solid rgba(255, 215, 0, 0.5); */
+    transition: all 0.4s ease;
+    /* box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); */
+    position: relative;
+    overflow: hidden;
+}
+
+.home-order-now-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    /* background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent); */
+    transition: left 0.6s ease;
+}
+
+.home-order-now-button:hover {
+    /* background: rgba(255, 215, 0, 0.3);
+    border-color: #ffd700; */
+    transform: translateY(-5px) scale(1.05);
+    /* box-shadow: 0 30px 50px rgba(0, 0, 0, 0.4); */
+}
+
+.home-order-now-button:hover::before {
+    left: 100%;
+}
+
+.home-order-now-button i {
+    font-size: 2rem;
+    transition: transform 0.4s ease;
+}
+
+.home-order-now-button:hover i {
+    transform: translateX(10px) rotate(10deg);
+}
+
+.home-coffee-icon {
+    animation: steam 2s infinite;
+}
+
+/* Swiper Navigation */
+.home-swiper .swiper-button-prev,
+.home-swiper .swiper-button-next {
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.home-swiper .swiper-button-prev:hover,
+.home-swiper .swiper-button-next:hover {
+    background: rgba(255, 215, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.home-swiper .swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    background: white;
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.home-swiper .swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #ffd700;
+    transform: scale(1.2);
+}
+
+/* Animations */
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes steam {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(10deg); }
+    75% { transform: rotate(-10deg); }
+}
+
+/* Responsive */
+@media screen and (max-width: 1024px) {
+    .home-store-name h1 {
+        font-size: 4.5rem;
+    }
+    
+    .home-order-now-button {
+        padding: 1.2rem 2.5rem;
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .home-content {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding: 0 2rem;
+        gap: 3rem;
+    }
+
+    .home-store-name {
+        text-align: center;
+    }
+
+    .home-store-name h1 {
+        font-size: 3.5rem;
+    }
+
+    .home-order-btn {
+        justify-content: center;
+    }
+
+    .home-order-now-button {
+        /* padding: 1rem 2rem; */
+        font-size: 1.3rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .home-store-name h1 {
+        font-size: 2.8rem;
+    }
+
+    .home-store-name .subtitle {
+        font-size: 1rem;
+    }
+
+    .home-order-now-button {
+        /* padding: 0.8rem 1.5rem; */
+        font-size: 1.1rem;
+    }
+}
