@@ -4,43 +4,61 @@
             <i class="fas fa-mug-hot"></i>
             <span>Kedanku Coffee</span>
         </div>
-        
+
         <div class="menu-toggle" id="menuToggle">
             <i class="fas fa-bars"></i>
         </div>
-        
+
         <ul class="nav-links" id="navLinks">
-            <li><a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Home</a></li>
-            <li><a href="{{ url('/about') }}" class="{{ request()->is('about') ? 'active' : '' }}">About</a></li>
-            <li><a href="{{ url('/menu') }}" class="{{ request()->is('menu') ? 'active' : '' }}">Menu Minuman</a></li>
-            <li><a href="{{ url('/testimoni') }}" class="{{ request()->is('testimoni') ? 'active' : '' }}">Testimoni</a></li>
-            <li><a href="{{ url('/contact') }}" class="{{ request()->is('contact') ? 'active' : '' }}">Contact Us</a></li>
+            <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
+            <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">Profile</a></li>
+            <li><a href="{{ route('guest.menu') }}" class="{{ request()->routeIs('guest.menu') ? 'active' : '' }}">Menu Minuman</a></li>
+            <li><a href="{{ route('testimoni') }}" class="{{ request()->routeIs('testimoni') ? 'active' : '' }}">Testimoni</a></li>
+            
+            {{-- Admin Menu - Only for admin/owner --}}
+            @auth
+                @if(Auth::user()->role == 'owner' || Auth::user()->role == 'karyawan')
+                    <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.*') ? 'active' : '' }}">Dashboard</a></li>
+                @endif
+            @endauth
         </ul>
 
         <div class="nav-right">
-            <!-- Guest View (Belum Login) -->
-            <div class="guest-view">
+            {{-- GUEST --}}
+            @guest
                 <a href="{{ route('login') }}" class="order-btn">
                     <span>Order Now</span>
                     <i class="fas fa-arrow-right"></i>
                 </a>
-            </div>
-            
-            <!-- User View (Sudah Login) - Akan ditampilkan dengan JS -->
-            {{-- <div class="user-view" style="display: none;">
-                <div class="user-profile">
-                    <div class="user-avatar">
-                        <i class="fas fa-user"></i>
+            @endguest
+
+            {{-- AUTHENTICATED USER --}}
+            @auth
+                <div class="user-view" id="userView">
+                    <div class="user-profile" id="userProfile">
+                        <div class="user-avatar">
+                            {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+                        </div>
+                        <span class="username">{{ Auth::user()->username }}</span>
+                        <i class="fas fa-chevron-down"></i>
                     </div>
-                    <span class="username">John Doe</span>
-                    <i class="fas fa-chevron-down dropdown-icon"></i>
+
+                    <a href="{{ route('cart.index') }}" class="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        {{-- HANYA LOGOUT --}}
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                
-                <a href="#" class="cart-icon">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-count">3</span>
-                </a>
-            </div> --}}
+            @endauth
         </div>
     </div>
 </nav>

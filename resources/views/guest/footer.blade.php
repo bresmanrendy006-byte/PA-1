@@ -17,9 +17,8 @@
             <h3>Quick Links</h3>
             <ul>
                 <li><a href="{{ route('about') }}">About</a></li>
-                <li><a href="{{ route('menu') }}">Menu</a></li>
+                <li><a href="{{ route('guest.menu') }}">Menu</a></li>
                 <li><a href="{{ route('testimoni') }}">Testimoni</a></li>
-                <li><a href="{{ route('contact') }}">Contact</a></li>
             </ul>
         </div>
 

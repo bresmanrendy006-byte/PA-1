@@ -1,0 +1,56 @@
+/* ===== Reset ===== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#f7efe7;
+    color:#333;
+}
+
+/* ===== Layout ===== */
+.admin-layout{
+    display:flex;
+    min-height:100vh;
+}
+
+/* ===== Main Content ===== */
+.main-content{
+    flex:1;
+    padding:30px;
+    background:#f7efe7;
+    width:100%;
+}
+
+/* ===== Container ===== */
+.admin-container{
+    max-width:1200px;
+    width:100%;
+}
+
+/* ===== Page Title ===== */
+.page-title{
+    font-size:22px;
+    font-weight:600;
+    margin-bottom:20px;
+    color:#3a2a1c;
+}
+
+/* ===== Button Global ===== */
+.btn{
+    background:#cd8c63;
+    border:none;
+    padding:10px 16px;
+    border-radius:8px;
+    color:white;
+    cursor:pointer;
+    font-size:14px;
+    transition:0.2s;
+}
+
+.btn:hover{
+    background:#b7774f;
+}

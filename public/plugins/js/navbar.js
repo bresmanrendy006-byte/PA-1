@@ -11,15 +11,63 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // User dropdown toggle
+    const userView = document.getElementById('userView');
+    const userProfile = document.getElementById('userProfile');
+    
+    if (userView && userProfile) {
+        userProfile.addEventListener('click', function(e) {
+            e.stopPropagation();
+            userView.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (userView && !userView.contains(e.target)) {
+                userView.classList.remove('active');
+            }
+        });
+    }
+
     // Navbar scroll effect
+    const navbar = document.querySelector('.navbar');
+    
     window.addEventListener('scroll', function() {
-        const navbar = document.querySelector('.navbar');
         if (window.scrollY > 50) {
-            navbar.style.background = '#1a1a1a';
-            navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.3)';
+            navbar.classList.add('scrolled');
         } else {
-            navbar.style.background = '#222';
-            navbar.style.boxShadow = 'none';
+            navbar.classList.remove('scrolled');
         }
+    });
+    
+    // Update cart count (example - you can implement this with AJAX)
+    function updateCartCount() {
+        // This function should fetch cart count from your backend
+        // Example: fetch('/api/cart/count')
+        //   .then(response => response.json())
+        //   .then(data => {
+        //       document.getElementById('cartCount').textContent = data.count;
+        //   });
+        
+        // For now, just a placeholder
+        const cartCount = localStorage.getItem('cartCount') || 0;
+        const cartCountElement = document.getElementById('cartCount');
+        if (cartCountElement) {
+            cartCountElement.textContent = cartCount;
+        }
+    }
+    
+    // Call updateCartCount on page load
+    updateCartCount();
+    
+    // Close mobile menu when clicking a link
+    const navLinksItems = document.querySelectorAll('.nav-links a');
+    navLinksItems.forEach(link => {
+        link.addEventListener('click', () => {
+            if (navLinks && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                if (menuToggle) menuToggle.classList.remove('active');
+            }
+        });
     });
 });

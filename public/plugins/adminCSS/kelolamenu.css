@@ -1,0 +1,276 @@
+/* =========================
+   ADMIN MENU CONTAINER
+========================= */
+
+.admin-menu-container{
+padding:35px;
+background:#f4f6f9;
+min-height:100vh;
+font-family:Segoe UI, Arial, sans-serif;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.admin-menu-container h2{
+font-size:26px;
+margin-bottom:20px;
+color:#333;
+}
+
+
+/* =========================
+   ADD BUTTON
+========================= */
+
+.btn-add{
+background:#6b3e26;
+color:white;
+padding:10px 18px;
+border-radius:6px;
+text-decoration:none;
+display:inline-block;
+margin-bottom:22px;
+font-size:14px;
+font-weight:500;
+transition:all 0.2s ease;
+}
+
+.btn-add:hover{
+background:#4e2c1a;
+transform:translateY(-1px);
+box-shadow:0 3px 8px rgba(0,0,0,0.15);
+}
+
+
+/* =========================
+   TABLE WRAPPER
+========================= */
+
+.table-wrapper{
+background:white;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.08);
+overflow:hidden;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.menu-table{
+width:100%;
+border-collapse:collapse;
+}
+
+
+/* =========================
+   TABLE HEADER
+========================= */
+
+.menu-table th{
+background:#2c2c2c;
+color:white;
+padding:14px;
+text-align:left;
+font-size:14px;
+font-weight:500;
+letter-spacing:0.5px;
+}
+
+
+/* =========================
+   TABLE BODY
+========================= */
+
+.menu-table td{
+padding:14px;
+border-bottom:1px solid #f0f0f0;
+font-size:14px;
+color:#444;
+vertical-align:middle;
+}
+
+
+/* ROW HOVER */
+
+.menu-table tbody tr:hover{
+background:#fafafa;
+}
+
+
+/* =========================
+   IMAGE
+========================= */
+
+.menu-img{
+width:70px;
+height:70px;
+object-fit:cover;
+border-radius:8px;
+border:1px solid #eee;
+}
+
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.menu-actions{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.btn-edit{
+background:#ffc107;
+color:black;
+padding:6px 12px;
+border-radius:5px;
+text-decoration:none;
+font-size:13px;
+font-weight:500;
+transition:all 0.2s;
+}
+
+.btn-edit:hover{
+background:#e0a800;
+transform:scale(1.05);
+}
+
+.btn-delete{
+background:#dc3545;
+color:white;
+padding:6px 12px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+font-size:13px;
+font-weight:500;
+transition:all 0.2s;
+}
+
+.btn-delete:hover{
+background:#b02a37;
+transform:scale(1.05);
+}
+
+
+/* =========================
+   FORM DELETE
+========================= */
+
+.delete-form{
+display:inline;
+}
+
+
+/* =========================
+   EMPTY TEXT
+========================= */
+
+.empty-text{
+padding:25px;
+text-align:center;
+color:#777;
+font-style:italic;
+}
+
+
+/* =========================
+   FORM STYLE
+========================= */
+
+.form-group{
+margin-bottom:18px;
+}
+
+.form-group label{
+display:block;
+margin-bottom:6px;
+font-weight:600;
+font-size:14px;
+color:#444;
+}
+
+.form-group input,
+.form-group textarea{
+width:100%;
+padding:10px;
+border:1px solid #ddd;
+border-radius:6px;
+font-size:14px;
+outline:none;
+transition:all 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus{
+border-color:#6b3e26;
+box-shadow:0 0 4px rgba(107,62,38,0.25);
+}
+
+.form-group textarea{
+min-height:110px;
+resize:vertical;
+}
+
+
+/* =========================
+   SUCCESS MESSAGE
+========================= */
+
+.success-msg{
+background:#d4edda;
+color:#155724;
+padding:12px 16px;
+border-radius:6px;
+margin-bottom:15px;
+font-size:14px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+.menu-table th,
+.menu-table td{
+font-size:13px;
+padding:10px;
+}
+
+.menu-img{
+width:55px;
+height:55px;
+}
+
+}
+
+@media(max-width:600px){
+
+.admin-menu-container{
+padding:20px;
+}
+
+.btn-add{
+font-size:13px;
+padding:8px 14px;
+}
+
+.menu-table th,
+.menu-table td{
+font-size:12px;
+}
+
+.menu-img{
+width:45px;
+height:45px;
+}
+
+}

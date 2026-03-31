@@ -10,24 +10,17 @@
 <section class="home-section">
     <!-- Swiper Carousel -->
     <div class="swiper home-swiper">
-        <div class="swiper-wrapper">
-            <!-- Slide 1 -->
-            <div class="swiper-slide">
-                <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Coffee Shop Interior">
-            </div>
-            <!-- Slide 2 -->
-            <div class="swiper-slide">
-                <img src="https://images.unsplash.com/photo-1525193612562-0ec53b0e5d7c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Coffee Bar">
-            </div>
-            <!-- Slide 3 -->
-            <div class="swiper-slide">
-                <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?ixlib=rb-4.0.3&auto=format&fit=crop&w=2047&q=80" alt="Coffee Shop Outdoor">
-            </div>
-            <!-- Slide 4 -->
-            <div class="swiper-slide">
-                <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Coffee Shop Night">
-            </div>
-        </div>
+    <div class="swiper-wrapper">
+
+    @foreach($images as $img)
+
+    <div class="swiper-slide">
+    <img src="{{ asset('storage/'.$img->image) }}" alt="Coffee">
+    </div>
+
+    @endforeach
+
+</div>
         
         <!-- Overlay -->
         <div class="home-overlay"></div>

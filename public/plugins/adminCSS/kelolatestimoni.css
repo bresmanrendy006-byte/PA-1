@@ -1,0 +1,30 @@
+.table-testimoni{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+.table-testimoni th,
+.table-testimoni td{
+padding:12px;
+border-bottom:1px solid #ddd;
+text-align:left;
+}
+
+.table-testimoni th{
+background:#333;
+color:white;
+}
+
+.table-testimoni img{
+border-radius:8px;
+}
+
+.btn-delete{
+background:red;
+color:white;
+border:none;
+padding:6px 12px;
+cursor:pointer;
+border-radius:6px;
+}

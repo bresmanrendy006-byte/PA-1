@@ -1,0 +1,104 @@
+.order-container{
+max-width:900px;
+margin:auto;
+padding:40px 20px;
+}
+
+.order-title{
+font-size:28px;
+margin-bottom:25px;
+}
+
+.order-info{
+background:#f9f9f9;
+padding:20px;
+border-radius:10px;
+margin-bottom:25px;
+}
+
+.status{
+padding:6px 14px;
+border-radius:20px;
+font-size:14px;
+font-weight:600;
+}
+
+.status.pending{
+background:#fff3cd;
+color:#856404;
+}
+
+.status.confirmed{
+background:#d4edda;
+color:#155724;
+}
+
+.status.rejected{
+background:#f8d7da;
+color:#721c24;
+}
+
+.order-table table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:10px;
+overflow:hidden;
+}
+
+.order-table th{
+background:#2f2f2f;
+color:white;
+padding:14px;
+text-align:left;
+font-weight:600;
+}
+
+.order-table td{
+padding:14px;
+border-bottom:1px solid #eee;
+}
+
+.menu-name{
+font-weight:600;
+}
+
+.order-total{
+margin-top:20px;
+text-align:right;
+}
+
+.order-total h3{
+font-size:20px;
+}
+
+.order-total span{
+color:#cd8c63;
+margin-left:10px;
+}
+
+.order-actions{
+margin-top:30px;
+}
+
+.btn-back{
+display:inline-block;
+padding:10px 20px;
+background:#cd8c63;
+color:white;
+border-radius:6px;
+text-decoration:none;
+font-weight:500;
+}
+
+.btn-back:hover{
+background:#b47752;
+}
+
+.alert-error{
+background:#ffe0e0;
+color:#a80000;
+padding:12px;
+border-radius:6px;
+margin-bottom:20px;
+}

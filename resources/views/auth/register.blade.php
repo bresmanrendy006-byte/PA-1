@@ -11,11 +11,17 @@
 <section class="auth-section">
     <div class="auth-container">
         <h2>Register</h2>
-        <form>
-            <input type="text" placeholder="Nama Lengkap" required>
-            <input type="email" placeholder="Email" required>
-            <input type="password" placeholder="Password" required>
-            <button type="submit">Daftar</button>
+        <form action="{{ route('register.process') }}" method="POST">
+        @csrf
+
+        <input type="text" name="username" placeholder="Nama Lengkap" required>
+
+        <input type="email" name="email" placeholder="Email" required>
+
+        <input type="password" name="password" placeholder="Password" required>
+
+        <button type="submit">Daftar</button>
+
         </form>
 
         <p class="auth-switch">

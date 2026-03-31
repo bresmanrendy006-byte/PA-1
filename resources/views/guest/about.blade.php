@@ -15,37 +15,66 @@
 </section>
 
 <section class="about-main">
-    <div class="about-container">
-        <div class="about-left">
-            <h2>Cerita Kami</h2>
-            <p>
-                Kedanku Coffee hadir untuk menghadirkan pengalaman ngopi premium
-                dengan suasana nyaman dan modern di Balige.
-            </p>
-            <p>
-                Kami menggunakan biji kopi pilihan dengan proses roasting terbaik
-                untuk memastikan setiap cangkir memiliki cita rasa yang konsisten.
-            </p>
 
-            <div class="about-stats">
-                <div class="stat-item">
-                    <h3>5+</h3>
-                    <span>Tahun Pengalaman</span>
-                </div>
-                <div class="stat-item">
-                    <h3>10K+</h3>
-                    <span>Pelanggan Puas</span>
-                </div>
-                <div class="stat-item">
-                    <h3>50+</h3>
-                    <span>Menu Variasi</span>
-                </div>
-            </div>
-        </div>
+<div class="about-container">
 
-        <div class="about-right">
-            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1000&q=80" alt="About Coffee">
-        </div>
+    <!-- OWNER -->
+    <!-- OWNER -->
+<div class="about-owner">
+
+    <div class="owner-image">
+        @if($profile && $profile->owner_photo)
+        <img src="{{ asset('storage/'.$profile->owner_photo) }}">
+        @endif
     </div>
+
+    <div class="owner-info">
+        <h2>Pemilik Kedanku Coffee</h2>
+        <h3>{{ $profile->owner_name ?? 'Pemilik Kedai' }}</h3>
+
+        <p>
+        {{ $profile->owner_description ?? '' }}
+        </p>
+
+    </div>
+
+    </div>
+
+    <!-- SEJARAH -->
+    <div class="about-block">
+        <h2>Sejarah Kedanku Coffee</h2>
+        <p>
+        {{ $profile->history ?? '' }}
+        </p>
+    </div>
+
+    <!-- NARASI -->
+    <div class="about-block">
+        <h2>Pengalaman Ngopi</h2>
+        <p>
+        {{ $profile->experience ?? '' }}
+        </p>
+    </div>
+
+    <!-- LOKASI -->
+    <div class="about-block location-block">
+        <h2>Lokasi Kami</h2>
+
+        <p>
+            📍 {{ $profile->location_name ?? '' }}
+        </p>
+
+    @if($profile && $profile->latitude && $profile->longitude)
+
+    <iframe
+    src="https://maps.google.com/maps?q={{ $profile->latitude }},{{ $profile->longitude }}&z=15&output=embed">
+    </iframe>
+
+    @endif
+
+    </div>
+
+</div>
+
 </section>
 @endsection

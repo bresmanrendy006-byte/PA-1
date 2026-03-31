@@ -11,9 +11,32 @@
 <section class="auth-section">
     <div class="auth-container">
         <h2>Login</h2>
-        <form>
-            <input type="email" placeholder="Email" required>
-            <input type="password" placeholder="Password" required>
+
+        {{-- pesan error --}}
+        @if(session('error'))
+            <div class="auth-error">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        <form action="{{ route('login.process') }}" method="POST">
+            @csrf
+
+            <input 
+                type="email" 
+                name="email" 
+                placeholder="Email"
+                value="{{ old('email') }}"
+                required
+            >
+
+            <input 
+                type="password" 
+                name="password" 
+                placeholder="Password"
+                required
+            >
+
             <button type="submit">Login</button>
         </form>
 
