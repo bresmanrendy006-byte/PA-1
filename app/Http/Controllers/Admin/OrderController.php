@@ -8,7 +8,12 @@ use App\Models\Order;
 class OrderController extends Controller
 {
 
-// PESANAN MASUK
+/*
+|--------------------------------------------------------------------------
+| 1. Kelola Pesanan (Pending)
+|--------------------------------------------------------------------------
+*/
+
 public function index()
 {
 
@@ -17,12 +22,17 @@ $orders = Order::with('items.menu','user')
 ->latest()
 ->get();
 
-return view('admin.orders.index',compact('orders'));
+return view('admin.orders.kelolapemesanan',compact('orders'));
 
 }
 
 
-// KONFIRMASI PESANAN
+/*
+|--------------------------------------------------------------------------
+| 2. Konfirmasi Pesanan
+|--------------------------------------------------------------------------
+*/
+
 public function confirm($id)
 {
 
@@ -32,12 +42,19 @@ $order->update([
 'status' => 'confirmed'
 ]);
 
-return back()->with('success','Pesanan dikonfirmasi');
+return redirect()
+->route('admin.orders.index')
+->with('success','Pesanan berhasil dikonfirmasi');
 
 }
 
 
-// TOLAK PESANAN
+/*
+|--------------------------------------------------------------------------
+| 3. Tolak Pesanan
+|--------------------------------------------------------------------------
+*/
+
 public function reject($id)
 {
 
@@ -47,12 +64,19 @@ $order->update([
 'status' => 'rejected'
 ]);
 
-return back()->with('success','Pesanan ditolak');
+return redirect()
+->route('admin.orders.index')
+->with('success','Pesanan ditolak');
 
 }
 
 
-// HISTORY PESANAN
+/*
+|--------------------------------------------------------------------------
+| 4. History Pesanan
+|--------------------------------------------------------------------------
+*/
+
 public function history()
 {
 

@@ -1,93 +1,158 @@
-/* ================= FOOTER ================= */
+/* =========================
+   FOOTER
+========================= */
 
-.footer {
-    background: #cd8c63; /* beda tipis dari body (#222 misalnya) */
-    color: #f5f5f5;
-    padding: 4rem 3rem 2rem;
+.footer{
+background:#cd8c63;
+color:#f5f5f5;
+
+padding:60px 40px 25px;
 }
 
-/* Hilangkan jarak antar section */
-section + .footer {
-    margin-top: 0;
+
+/* Menghilangkan jarak antar section */
+
+section + .footer{
+margin-top:0;
 }
 
-.footer-container {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 3rem;
+
+/* =========================
+   FOOTER GRID
+========================= */
+
+.footer-container{
+max-width:1400px;
+margin:auto;
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:40px;
 }
 
-.footer-col h3 {
-    margin-bottom: 1rem;
-    color: #ffffff; /* emas soft */
+
+/* =========================
+   FOOTER LOGO
+========================= */
+
+.footer-logo{
+display:flex;
+align-items:center;
+gap:10px;
+
+font-size:22px;
+font-weight:700;
+margin-bottom:12px;
 }
 
-.footer-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
+.footer-logo i{
+color:#ffffff;
 }
 
-.footer-logo i {
-    color: #ffffff;
+
+/* =========================
+   FOOTER TEXT
+========================= */
+
+.footer-col h3{
+margin-bottom:14px;
+color:#ffffff;
 }
 
-.footer-col p {
-    font-size: 0.9rem;
-    opacity: 0.75;
-    margin-bottom: 0.5rem;
+.footer-col p{
+font-size:14px;
+opacity:0.8;
+margin-bottom:6px;
+line-height:1.6;
 }
 
-.footer-col ul {
-    list-style: none;
+
+/* =========================
+   FOOTER LINKS
+========================= */
+
+.footer-col ul{
+list-style:none;
+padding:0;
 }
 
-.footer-col ul li {
-    margin-bottom: 0.5rem;
+.footer-col ul li{
+margin-bottom:8px;
 }
 
-.footer-col ul li a {
-    text-decoration: none;
-    color: #ddd;
-    transition: 0.3s;
+.footer-col ul li a{
+text-decoration:none;
+color:#eeeeee;
+transition:0.3s;
 }
 
-.footer-col ul li a:hover {
-    color: #ffffff;
+.footer-col ul li a:hover{
+color:#ffffff;
+padding-left:3px;
 }
 
-.social-icons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 0.5rem;
+
+/* =========================
+   SOCIAL ICONS
+========================= */
+
+.social-icons{
+display:flex;
+gap:12px;
+margin-top:10px;
 }
 
-.social-icons a {
-    background: #222;
-    color: #ffffff;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
+.social-icons a{
+width:40px;
+height:40px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:#222;
+color:#fff;
+
+border-radius:50%;
+transition:0.3s;
 }
 
-.social-icons a:hover {
-    background: #ffffff;
-    color: #191919;
+.social-icons a:hover{
+background:#ffffff;
+color:#191919;
+transform:translateY(-3px);
 }
 
-.footer-bottom {
-    text-align: center;
-    margin-top: 2.5rem;
-    padding-top: 1rem;
-    font-size: 0.85rem;
-    opacity: 0.6;
+
+/* =========================
+   FOOTER BOTTOM
+========================= */
+
+.footer-bottom{
+text-align:center;
+
+margin-top:40px;
+padding-top:15px;
+
+border-top:1px solid rgba(255,255,255,0.2);
+
+font-size:13px;
+opacity:0.7;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+.footer{
+padding:50px 25px 20px;
+}
+
+.footer-container{
+gap:30px;
+}
+
 }

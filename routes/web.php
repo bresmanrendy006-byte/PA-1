@@ -11,6 +11,10 @@ use App\Http\Controllers\TestimoniController;
 use App\Http\Controllers\Admin\TestimoniController as AdminTestimoniController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\StockController;
+use App\Http\Controllers\Admin\DashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +24,7 @@ use App\Http\Controllers\OrderController;
 
 Route::get('/', [HomeController::class,'index'])->name('home');
 Route::get('/about',[AboutController::class,'index'])->name('about');
-Route::get('/menu', [MenuController::class,'guestMenu'])->name('guest.menu');
+Route::get('/menu',[MenuController::class,'guestMenu'])->name('guest.menu');
 Route::get('/testimoni',[TestimoniController::class,'index'])->name('testimoni');
 
 
@@ -30,18 +34,22 @@ Route::get('/testimoni',[TestimoniController::class,'index'])->name('testimoni')
 |--------------------------------------------------------------------------
 */
 
-Route::get('/login', [AuthController::class, 'login'])->name('login');
-Route::post('/login', [AuthController::class, 'processLogin'])->name('login.process');
+Route::controller(AuthController::class)->group(function(){
 
-Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/register', [AuthController::class, 'processRegister'])->name('register.process');
+Route::get('/login','login')->name('login');
+Route::post('/login','processLogin')->name('login.process');
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/register','register')->name('register');
+Route::post('/register','processRegister')->name('register.process');
+
+Route::post('/logout','logout')->name('logout');
+
+});
 
 
 /*
 |--------------------------------------------------------------------------
-| Customer Area (Login Required)
+| Customer Area
 |--------------------------------------------------------------------------
 */
 
@@ -53,43 +61,59 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::prefix('cart')->name('cart.')->group(function(){
 
-    Route::post('/cart/add/{menuId}', [CartController::class, 'add'])->name('cart.add');
+        Route::get('/', [CartController::class,'index'])->name('index');
 
-    Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+        Route::post('/add/{menuId}', [CartController::class,'add'])->name('add');
 
-    Route::delete('/cart/remove/{id}', [CartController::class, 'destroy'])->name('cart.remove');
+        Route::put('/update/{id}', [CartController::class,'update'])->name('update');
 
-    Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+        Route::delete('/remove/{id}', [CartController::class,'destroy'])->name('remove');
 
-    Route::get('/api/cart/count', [CartController::class, 'getCartCount'])->name('api.cart.count');
+        Route::delete('/clear', [CartController::class,'clear'])->name('clear');
 
+        Route::get('/count',[CartController::class,'getCartCount'])->name('count');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Checkout & Orders
-    |--------------------------------------------------------------------------
-    */
-
-    Route::post('/checkout', [OrderController::class,'checkout'])->name('checkout');
-
-    Route::get('/orders', [OrderController::class,'index'])->name('orders.index');
-
-    Route::get('/orders/{id}', [OrderController::class,'show'])->name('orders.show');
+    });
 
 
     /*
     |--------------------------------------------------------------------------
-    | Testimoni Customer
+    | Orders
     |--------------------------------------------------------------------------
     */
 
-    Route::post('/testimoni',[TestimoniController::class,'store'])->name('testimoni.store');
+    Route::prefix('orders')->name('orders.')->group(function(){
 
-    Route::put('/testimoni/{id}',[TestimoniController::class,'update'])->name('testimoni.update');
+        Route::post('/checkout',[OrderController::class,'checkout'])->name('checkout');
 
-    Route::delete('/testimoni/{id}',[TestimoniController::class,'destroy'])->name('testimoni.destroy');
+        Route::get('/',[OrderController::class,'index'])->name('index');
+
+        Route::get('/{id}',[OrderController::class,'show'])->name('show');
+
+        Route::delete('/{id}/cancel',[OrderController::class,'cancel'])->name('cancel');
+
+        Route::delete('/{id}',[OrderController::class,'destroy'])->name('destroy');
+
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Customer Testimoni
+    |--------------------------------------------------------------------------
+    */
+
+    Route::prefix('testimoni')->name('testimoni.')->group(function(){
+
+        Route::post('/',[TestimoniController::class,'store'])->name('store');
+
+        Route::put('/{id}',[TestimoniController::class,'update'])->name('update');
+
+        Route::delete('/{id}',[TestimoniController::class,'destroy'])->name('destroy');
+
+    });
 
 });
 
@@ -105,74 +129,129 @@ Route::middleware('auth')
 ->name('admin.')
 ->group(function () {
 
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/dashboard',[DashboardController::class,'index'])
+    ->name('dashboard');
 
 
     /*
     |--------------------------------------------------------------------------
-    | Kelola Home
+    | Home Management
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/kelola-home',[HomeImageController::class,'index'])->name('kelolahome');
+    Route::prefix('home')->name('home.')->group(function(){
 
-    Route::post('/kelola-home',[HomeImageController::class,'store'])->name('home.store');
+        Route::get('/',[HomeImageController::class,'index'])->name('index');
 
-    Route::put('/kelola-home/{id}',[HomeImageController::class,'update'])->name('home.update');
+        Route::post('/',[HomeImageController::class,'store'])->name('store');
 
-    Route::delete('/kelola-home/{id}',[HomeImageController::class,'destroy'])->name('home.delete');
+        Route::put('/{id}',[HomeImageController::class,'update'])->name('update');
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Kelola Profile
-    |--------------------------------------------------------------------------
-    */
-
-    Route::prefix('profile')->group(function(){
-
-        Route::get('/', [ProfileController::class,'index'])->name('profile.index');
-
-        Route::get('/form', [ProfileController::class,'form'])->name('profile.form');
-
-        Route::post('/save', [ProfileController::class,'save'])->name('profile.save');
-
-        Route::delete('/clear',[ProfileController::class,'clear'])->name('profile.clear');
-
-        Route::post('/delete-photo', [ProfileController::class,'deletePhoto'])->name('profile.deletePhoto');
-
-        Route::delete('/destroy', [ProfileController::class,'destroy'])->name('profile.destroy');
+        Route::delete('/{id}',[HomeImageController::class,'destroy'])->name('delete');
 
     });
 
 
     /*
     |--------------------------------------------------------------------------
-    | Kelola Menu
+    | Profile
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/menu',[MenuController::class,'index'])->name('menu.index');
+    Route::prefix('profile')->name('profile.')->group(function(){
 
-    Route::get('/menu/create',[MenuController::class,'create'])->name('menu.create');
+        Route::get('/',[ProfileController::class,'index'])->name('index');
 
-    Route::post('/menu/store',[MenuController::class,'store'])->name('menu.store');
+        Route::get('/form',[ProfileController::class,'form'])->name('form');
 
-    Route::get('/menu/edit/{menu}',[MenuController::class,'edit'])->name('menu.edit');
+        Route::post('/save',[ProfileController::class,'save'])->name('save');
 
-    Route::put('/menu/update/{menu}',[MenuController::class,'update'])->name('menu.update');
+        Route::delete('/clear',[ProfileController::class,'clear'])->name('clear');
 
-    Route::delete('/menu/delete/{menu}',[MenuController::class,'destroy'])->name('menu.delete');
+        Route::post('/delete-photo',[ProfileController::class,'deletePhoto'])->name('deletePhoto');
+
+        Route::delete('/destroy',[ProfileController::class,'destroy'])->name('destroy');
+
+    });
 
 
     /*
     |--------------------------------------------------------------------------
-    | Kelola Testimoni
+    | Menu Management
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/kelolatestimoni',[AdminTestimoniController::class,'index'])->name('testimoni.index');
+    Route::prefix('menu')->name('menu.')->group(function(){
 
-    Route::delete('/kelolatestimoni/{id}',[AdminTestimoniController::class,'destroy'])->name('testimoni.destroy');
+        Route::get('/',[MenuController::class,'index'])->name('index');
+
+        Route::get('/create',[MenuController::class,'create'])->name('create');
+
+        Route::post('/store',[MenuController::class,'store'])->name('store');
+
+        Route::get('/edit/{menu}',[MenuController::class,'edit'])->name('edit');
+
+        Route::put('/update/{menu}',[MenuController::class,'update'])->name('update');
+
+        Route::delete('/delete/{menu}',[MenuController::class,'destroy'])->name('delete');
+
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Testimoni Management
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/testimoni',[AdminTestimoniController::class,'index'])
+    ->name('testimoni.index');
+
+    Route::delete('/testimoni/{id}',[AdminTestimoniController::class,'destroy'])
+    ->name('testimoni.destroy');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Orders Management
+    |--------------------------------------------------------------------------
+    */
+
+    Route::prefix('orders')->name('orders.')->group(function(){
+
+        Route::get('/',[AdminOrderController::class,'index'])->name('index');
+
+        Route::post('/{id}/confirm',[AdminOrderController::class,'confirm'])->name('confirm');
+
+        Route::post('/{id}/reject',[AdminOrderController::class,'reject'])->name('reject');
+
+        Route::get('/history',[AdminOrderController::class,'history'])->name('history');
+
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Stock Management
+    |--------------------------------------------------------------------------
+    */
+
+    Route::prefix('stock')->name('stock.')->group(function(){
+
+        Route::get('/',[StockController::class,'index'])->name('index');
+
+        Route::post('/',[StockController::class,'store'])->name('store');
+
+        Route::put('/{id}',[StockController::class,'update'])->name('update');
+
+        Route::delete('/{id}',[StockController::class,'destroy'])->name('delete');
+
+    });
 
 });

@@ -388,3 +388,32 @@
         font-size: 1rem;
     }
 }
+
+.btn-orders{
+flex:1;
+background:#2c3e50;
+color:white;
+padding:12px;
+border:none;
+border-radius:5px;
+font-size:1rem;
+font-weight:600;
+text-decoration:none;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:8px;
+transition:all 0.3s ease;
+}
+
+.btn-orders:hover{
+background:#1a252f;
+transform:translateY(-2px);
+}
+
+.payment-info{
+margin-top:10px;
+font-size:14px;
+color:#777;
+text-align:center;
+}

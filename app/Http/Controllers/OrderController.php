@@ -12,124 +12,180 @@ use Exception;
 class OrderController extends Controller
 {
 
-    /*
-    |--------------------------------------------------------------------------
-    | 1. Checkout Cart → Order
-    |--------------------------------------------------------------------------
-    */
+/*
+|--------------------------------------------------------------------------
+| 1. Checkout Cart → Order
+|--------------------------------------------------------------------------
+*/
 
-    public function checkout()
-    {
+public function checkout()
+{
 
-        $userId = Auth::id();
+$userId = Auth::id();
 
-        // Cek apakah masih ada pesanan pending
-        $hasPendingOrder = Order::where('user_id', $userId)
-            ->where('status', 'pending')
-            ->exists();
+$hasPendingOrder = Order::where('user_id',$userId)
+->where('status','pending')
+->exists();
 
-        if ($hasPendingOrder) {
+if($hasPendingOrder){
 
-            $pendingOrder = Order::where('user_id', $userId)
-                ->where('status', 'pending')
-                ->first();
+$pendingOrder = Order::where('user_id',$userId)
+->where('status','pending')
+->first();
 
-            return redirect()
-                ->route('orders.show', $pendingOrder->id)
-                ->with('error', 'Pesanan sebelumnya masih menunggu konfirmasi.');
-        }
+return redirect()
+->route('orders.show',$pendingOrder->id)
+->with('error','Pesanan sebelumnya masih menunggu konfirmasi.');
 
-        // Ambil cart user
-        $carts = Cart::with('menu')
-            ->where('user_id', $userId)
-            ->get();
+}
 
-        if ($carts->isEmpty()) {
-            return redirect()
-                ->route('cart.index')
-                ->with('error', 'Keranjang kosong.');
-        }
+$carts = Cart::with('menu')
+->where('user_id',$userId)
+->get();
 
-        DB::beginTransaction();
+if($carts->isEmpty()){
+return redirect()
+->route('cart.index')
+->with('error','Keranjang kosong.');
+}
 
-        try {
+DB::beginTransaction();
 
-            // Hitung total harga
-            $totalPrice = 0;
+try{
 
-            foreach ($carts as $cart) {
-                $totalPrice += $cart->quantity * $cart->menu->price;
-            }
+$totalPrice = 0;
 
-            // Buat order
-            $order = Order::create([
-                'user_id' => $userId,
-                'total_price' => $totalPrice,
-                'status' => 'pending'
-            ]);
+foreach($carts as $cart){
+$totalPrice += $cart->quantity * $cart->menu->price;
+}
 
-            // Simpan item order
-            foreach ($carts as $cart) {
+$order = Order::create([
+'user_id' => $userId,
+'total_price' => $totalPrice,
+'status' => 'pending'
+]);
 
-                OrderItem::create([
-                    'order_id' => $order->id,
-                    'menu_id' => $cart->menu_id,
-                    'quantity' => $cart->quantity,
-                    'price' => $cart->menu->price
-                ]);
-            }
+foreach($carts as $cart){
 
-            // Kosongkan cart
-            Cart::where('user_id', $userId)->delete();
+OrderItem::create([
+'order_id' => $order->id,
+'menu_id' => $cart->menu_id,
+'quantity' => $cart->quantity,
+'price' => $cart->menu->price
+]);
 
-            DB::commit();
+}
 
-            return redirect()
-                ->route('orders.show', $order->id)
-                ->with('success', 'Pesanan berhasil dibuat.');
+Cart::where('user_id',$userId)->delete();
 
-        } catch (Exception $e) {
+DB::commit();
 
-            DB::rollBack();
+return redirect()
+->route('orders.show',$order->id)
+->with('success','Pesanan berhasil dibuat.');
 
-            return redirect()
-                ->back()
-                ->with('error', 'Gagal membuat pesanan.');
-        }
-    }
+}
+catch(Exception $e){
+
+DB::rollBack();
+
+return redirect()->back()
+->with('error','Gagal membuat pesanan.');
+
+}
+
+}
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | 2. Daftar Order User
-    |--------------------------------------------------------------------------
-    */
+/*
+|--------------------------------------------------------------------------
+| 2. Daftar Order Customer
+|--------------------------------------------------------------------------
+*/
 
-    public function index()
-    {
+public function index()
+{
 
-        $orders = Order::with('items.menu')
-            ->where('user_id', Auth::id())
-            ->latest()
-            ->get();
+$orders = Order::with('items.menu')
+->where('user_id',Auth::id())
+->latest()
+->get();
 
-        return view('guest.orders.index', compact('orders'));
-    }
+/*
+Jika kamu tetap ingin memakai halaman cart
+kita kirim juga carts supaya tidak error
+*/
+
+$carts = Cart::with('menu')
+->where('user_id',Auth::id())
+->get();
+
+return view('guest.cart.index', compact('orders','carts'));
+
+}
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | 3. Detail Order
-    |--------------------------------------------------------------------------
-    */
+/*
+|--------------------------------------------------------------------------
+| 3. Detail Order
+|--------------------------------------------------------------------------
+*/
 
-    public function show($id)
-    {
+public function show($id)
+{
 
-        $order = Order::with('items.menu')
-            ->where('user_id', Auth::id())
-            ->findOrFail($id);
+$order = Order::with('items.menu')
+->where('user_id',Auth::id())
+->findOrFail($id);
 
-        return view('guest.orders.show', compact('order'));
-    }
+return view('guest.orders.show',compact('order'));
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| 4. Cancel Order
+|--------------------------------------------------------------------------
+*/
+
+public function cancel($id)
+{
+
+$order = Order::where('user_id',Auth::id())
+->findOrFail($id);
+
+if($order->status != 'pending'){
+return back()->with('error','Pesanan tidak bisa dibatalkan.');
+}
+
+$order->delete();
+
+return redirect()
+->route('cart.index')
+->with('success','Pesanan berhasil dibatalkan.');
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| 5. Delete Order
+|--------------------------------------------------------------------------
+*/
+
+public function destroy($id)
+{
+
+$order = Order::where('user_id',Auth::id())
+->findOrFail($id);
+
+$order->delete();
+
+return redirect()
+->route('cart.index')
+->with('success','Pesanan berhasil dihapus.');
+
+}
+
 }

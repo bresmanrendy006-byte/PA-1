@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Kedanku Coffee - Menu')
+@section('title','Kedanku Coffee - Menu')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('plugins/css/menu.css') }}">
@@ -8,7 +8,7 @@
 
 @section('content')
 
-<!-- HERO -->
+{{-- HERO --}}
 <section class="menu-hero">
     <div class="menu-hero-content">
         <h1>Menu Minuman</h1>
@@ -16,7 +16,10 @@
     </div>
 </section>
 
+
+{{-- MENU SECTION --}}
 <section class="menu-section">
+
 <div class="menu-container">
 
 <div class="menu-grid">
@@ -27,7 +30,10 @@
 
     {{-- IMAGE --}}
     @if($menu->image)
-        <img src="{{ asset('storage/'.$menu->image) }}">
+        <img 
+            src="{{ asset('storage/'.$menu->image) }}" 
+            alt="{{ $menu->name }}"
+        >
     @endif
 
     <div class="menu-info">
@@ -42,23 +48,34 @@
             </span>
         </div>
 
+
         {{-- ADD TO CART --}}
         @auth
-        <form action="{{ route('cart.add',$menu->id) }}" method="POST" class="add-cart-form">
+
+        <form 
+            action="{{ route('cart.add',$menu->id) }}" 
+            method="POST"
+            class="add-cart-form"
+        >
+
             @csrf
 
             <div class="cart-inputs">
 
-                <input type="number"
-                       name="quantity"
-                       value="1"
-                       min="1"
-                       class="qty-input">
+                <input
+                    type="number"
+                    name="quantity"
+                    value="1"
+                    min="1"
+                    class="qty-input"
+                >
 
-                <input type="text"
-                       name="notes"
-                       placeholder="Catatan (optional)"
-                       class="notes-input">
+                <input
+                    type="text"
+                    name="notes"
+                    placeholder="Catatan (optional)"
+                    class="notes-input"
+                >
 
             </div>
 
@@ -68,10 +85,13 @@
             </button>
 
         </form>
+
         @else
-            <a href="{{ route('login') }}" class="btn-add-cart">
-                Login untuk Pesan
-            </a>
+
+        <a href="{{ route('login') }}" class="btn-add-cart">
+            Login untuk Pesan
+        </a>
+
         @endauth
 
     </div>
@@ -82,6 +102,7 @@
 
 </div>
 </div>
+
 </section>
 
 @endsection
