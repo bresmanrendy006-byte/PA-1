@@ -30,7 +30,12 @@
 
     <!-- Main Content -->
     <main>
-        @yield('content')
+    <!-- Flash message global -->
+    @if(session('success'))
+        <div class="alert-toast success">{{ session('success') }}</div>
+    @endif
+    
+    @yield('content')
     </main>
 
     @include('guest.footer')
@@ -40,6 +45,7 @@
     <script src="{{ asset('plugins/js/navbar.js') }}"></script>
     
     <!-- Page Specific Scripts -->
+     <script src="{{ asset('plugins/js/popuphapus.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

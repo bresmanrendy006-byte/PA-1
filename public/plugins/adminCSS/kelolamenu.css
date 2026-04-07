@@ -2,11 +2,11 @@
    ADMIN MENU CONTAINER
 ========================= */
 
-.admin-menu-container{
-padding:35px;
-background:#f4f6f9;
-min-height:100vh;
-font-family:Segoe UI, Arial, sans-serif;
+.admin-menu-container {
+    padding: 35px;
+    background: #f4f6f9;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
 }
 
 
@@ -14,10 +14,26 @@ font-family:Segoe UI, Arial, sans-serif;
    TITLE
 ========================= */
 
-.admin-menu-container h2{
-font-size:26px;
-margin-bottom:20px;
-color:#333;
+.admin-menu-container h2 {
+    font-size: 26px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+
+/* =========================
+   MENU HEADER (judul + tombol tambah)
+========================= */
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.menu-header h2 {
+    margin-bottom: 0;
 }
 
 
@@ -25,23 +41,53 @@ color:#333;
    ADD BUTTON
 ========================= */
 
-.btn-add{
-background:#6b3e26;
-color:white;
-padding:10px 18px;
-border-radius:6px;
-text-decoration:none;
-display:inline-block;
-margin-bottom:22px;
-font-size:14px;
-font-weight:500;
-transition:all 0.2s ease;
+.btn-add {
+    background: #6b3e26;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
 }
 
-.btn-add:hover{
-background:#4e2c1a;
-transform:translateY(-1px);
-box-shadow:0 3px 8px rgba(0,0,0,0.15);
+.btn-add:hover {
+    background: #4e2c1a;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+
+/* =========================
+   ALERT MESSAGES
+========================= */
+
+.alert {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-error ul {
+    margin: 0;
+    padding-left: 18px;
 }
 
 
@@ -49,11 +95,11 @@ box-shadow:0 3px 8px rgba(0,0,0,0.15);
    TABLE WRAPPER
 ========================= */
 
-.table-wrapper{
-background:white;
-border-radius:10px;
-box-shadow:0 5px 20px rgba(0,0,0,0.08);
-overflow:hidden;
+.table-wrapper {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
 }
 
 
@@ -61,9 +107,9 @@ overflow:hidden;
    TABLE
 ========================= */
 
-.menu-table{
-width:100%;
-border-collapse:collapse;
+.menu-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
 
@@ -71,14 +117,14 @@ border-collapse:collapse;
    TABLE HEADER
 ========================= */
 
-.menu-table th{
-background:#2c2c2c;
-color:white;
-padding:14px;
-text-align:left;
-font-size:14px;
-font-weight:500;
-letter-spacing:0.5px;
+.menu-table th {
+    background: #2c2c2c;
+    color: white;
+    padding: 14px;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
 
@@ -86,19 +132,16 @@ letter-spacing:0.5px;
    TABLE BODY
 ========================= */
 
-.menu-table td{
-padding:14px;
-border-bottom:1px solid #f0f0f0;
-font-size:14px;
-color:#444;
-vertical-align:middle;
+.menu-table td {
+    padding: 14px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: #444;
+    vertical-align: middle;
 }
 
-
-/* ROW HOVER */
-
-.menu-table tbody tr:hover{
-background:#fafafa;
+.menu-table tbody tr:hover {
+    background: #fafafa;
 }
 
 
@@ -106,12 +149,18 @@ background:#fafafa;
    IMAGE
 ========================= */
 
-.menu-img{
-width:70px;
-height:70px;
-object-fit:cover;
-border-radius:8px;
-border:1px solid #eee;
+.menu-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.no-img {
+    font-size: 12px;
+    color: #aaa;
+    font-style: italic;
 }
 
 
@@ -119,52 +168,44 @@ border:1px solid #eee;
    ACTION BUTTONS
 ========================= */
 
-.menu-actions{
-display:flex;
-align-items:center;
-gap:8px;
+.menu-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.btn-edit{
-background:#ffc107;
-color:black;
-padding:6px 12px;
-border-radius:5px;
-text-decoration:none;
-font-size:13px;
-font-weight:500;
-transition:all 0.2s;
+.btn-edit {
+    background: #ffc107;
+    color: black;
+    padding: 6px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: inline-block;
 }
 
-.btn-edit:hover{
-background:#e0a800;
-transform:scale(1.05);
+.btn-edit:hover {
+    background: #e0a800;
+    transform: scale(1.05);
 }
 
-.btn-delete{
-background:#dc3545;
-color:white;
-padding:6px 12px;
-border:none;
-border-radius:5px;
-cursor:pointer;
-font-size:13px;
-font-weight:500;
-transition:all 0.2s;
+.btn-delete {
+    background: #dc3545;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
 }
 
-.btn-delete:hover{
-background:#b02a37;
-transform:scale(1.05);
-}
-
-
-/* =========================
-   FORM DELETE
-========================= */
-
-.delete-form{
-display:inline;
+.btn-delete:hover {
+    background: #b02a37;
+    transform: scale(1.05);
 }
 
 
@@ -172,11 +213,11 @@ display:inline;
    EMPTY TEXT
 ========================= */
 
-.empty-text{
-padding:25px;
-text-align:center;
-color:#777;
-font-style:italic;
+.empty-text {
+    padding: 25px;
+    text-align: center;
+    color: #777;
+    font-style: italic;
 }
 
 
@@ -184,52 +225,57 @@ font-style:italic;
    FORM STYLE
 ========================= */
 
-.form-group{
-margin-bottom:18px;
+.form-group {
+    margin-bottom: 18px;
 }
 
-.form-group label{
-display:block;
-margin-bottom:6px;
-font-weight:600;
-font-size:14px;
-color:#444;
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #444;
 }
 
 .form-group input,
-.form-group textarea{
-width:100%;
-padding:10px;
-border:1px solid #ddd;
-border-radius:6px;
-font-size:14px;
-outline:none;
-transition:all 0.2s;
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    transition: all 0.2s;
+    box-sizing: border-box;
 }
 
 .form-group input:focus,
-.form-group textarea:focus{
-border-color:#6b3e26;
-box-shadow:0 0 4px rgba(107,62,38,0.25);
+.form-group textarea:focus {
+    border-color: #6b3e26;
+    box-shadow: 0 0 4px rgba(107,62,38,0.25);
 }
 
-.form-group textarea{
-min-height:110px;
-resize:vertical;
+.form-group textarea {
+    min-height: 110px;
+    resize: vertical;
 }
 
 
 /* =========================
-   SUCCESS MESSAGE
+   CURRENT IMAGE PREVIEW
 ========================= */
 
-.success-msg{
-background:#d4edda;
-color:#155724;
-padding:12px 16px;
-border-radius:6px;
-margin-bottom:15px;
-font-size:14px;
+.current-img {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.current-img small {
+    color: #888;
+    font-size: 12px;
 }
 
 
@@ -237,40 +283,42 @@ font-size:14px;
    RESPONSIVE
 ========================= */
 
-@media(max-width:900px){
+@media (max-width: 900px) {
+    .menu-table th,
+    .menu-table td {
+        font-size: 13px;
+        padding: 10px;
+    }
 
-.menu-table th,
-.menu-table td{
-font-size:13px;
-padding:10px;
+    .menu-img {
+        width: 55px;
+        height: 55px;
+    }
 }
 
-.menu-img{
-width:55px;
-height:55px;
-}
+@media (max-width: 600px) {
+    .admin-menu-container {
+        padding: 20px;
+    }
 
-}
+    .menu-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 
-@media(max-width:600px){
+    .btn-add {
+        font-size: 13px;
+        padding: 8px 14px;
+    }
 
-.admin-menu-container{
-padding:20px;
-}
+    .menu-table th,
+    .menu-table td {
+        font-size: 12px;
+    }
 
-.btn-add{
-font-size:13px;
-padding:8px 14px;
-}
-
-.menu-table th,
-.menu-table td{
-font-size:12px;
-}
-
-.menu-img{
-width:45px;
-height:45px;
-}
-
+    .menu-img {
+        width: 45px;
+        height: 45px;
+    }
 }

@@ -45,11 +45,17 @@
 
                     <a href="{{ route('cart.index') }}" class="cart-icon">
                         <i class="fas fa-shopping-cart"></i>
-                        <span class="cart-count" id="cartCount">0</span>
+                        <span class="cart-count" id="cartCount">
+                            {{ Auth::user()->carts()->count() ?? 0 }}
+                        </span>
                     </a>
 
-                    <div class="dropdown-menu" id="dropdownMenu">
-                        {{-- HANYA LOGOUT --}}
+                    <div class="dropdown-menu">
+                        @if(Auth::user()->role == 'customer')
+                            <a href="{{ route('orders.index') }}">
+                                <i class="fas fa-receipt"></i> Pesanan Saya
+                            </a>
+                        @endif
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit">

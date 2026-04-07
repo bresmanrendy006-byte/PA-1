@@ -12,14 +12,17 @@
     <div class="swiper home-swiper">
     <div class="swiper-wrapper">
 
-    @foreach($images as $img)
-
-    <div class="swiper-slide">
-    <img src="{{ asset('storage/'.$img->image) }}" alt="Coffee">
-    </div>
-
-    @endforeach
-
+        @forelse($images as $img)
+            <div class="swiper-slide">
+                <img src="{{ asset('storage/'.$img->image) }}" 
+                    alt="{{ $img->caption ?? 'Kedanku Coffee - Balige' }}">
+            </div>
+        @empty
+            <div class="swiper-slide">
+                <img src="{{ asset('plugins/img/default-hero.jpg') }}" 
+                    alt="Kedanku Coffee - Balige">
+            </div>
+        @endforelse
 </div>
         
         <!-- Overlay -->
@@ -47,7 +50,11 @@
 
         <!-- Tombol Pesan di Kanan -->
         <div class="home-order-btn">
-            <a href="#" class="home-order-now-button">
+            @auth
+                <a href="{{ route('guest.menu') }}" class="home-order-now-button">
+            @else
+                <a href="{{ route('login') }}" class="home-order-now-button">
+            @endauth
                 <i class="fas fa-mug-hot home-coffee-icon"></i>
                 <span>Pesan Sekarang</span>
                 <i class="fas fa-arrow-right"></i>

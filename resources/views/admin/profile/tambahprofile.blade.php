@@ -24,10 +24,12 @@
 @if($profile && $profile->owner_photo)
 <div class="owner-preview">
 <img src="{{ asset('storage/'.$profile->owner_photo) }}">
-<a href="{{ route('admin.profile.deletePhoto') }}" class="delete-photo-btn" 
-   onclick="return confirm('Yakin ingin menghapus foto ini?')">
-   Hapus Foto
-</a>
+<form action="{{ route('admin.profile.deletePhoto') }}" method="POST">
+    @csrf
+    <button type="submit" onclick="return confirm('Yakin hapus foto?')">
+        Hapus Foto
+    </button>
+</form>
 </div>
 @endif
 </div>

@@ -32,16 +32,6 @@ function initHomeSwiper() {
 }
 
 function initHomeEvents() {
-    // Order button click
-    const orderButton = document.querySelector('.home-order-now-button');
-    if (orderButton) {
-        orderButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            // Redirect ke halaman menu atau modal
-            window.location.href = '/menu';
-            // window.location.href = '/menu';
-        });
-    }
 
     // Parallax effect (optional)
     window.addEventListener('scroll', function() {

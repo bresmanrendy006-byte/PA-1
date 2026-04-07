@@ -8,99 +8,67 @@
 
 <div class="admin-menu-container">
 
-<div class="menu-header">
+    <div class="menu-header">
+        <h2>Kelola Menu</h2>
+        <a href="{{ route('admin.menu.create') }}" class="btn-add">+ Tambah Menu</a>
+    </div>
 
-<h2>Kelola Menu</h2>
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
-<a href="{{ route('admin.menu.create') }}" class="btn-add">
-+ Tambah Menu
-</a>
+    <div class="table-wrapper">
+        <table class="menu-table">
+            <thead>
+                <tr>
+                    <th>Gambar</th>
+                    <th>Nama Menu</th>
+                    <th>Harga</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
 
-</div>
+                @forelse($menus as $menu)
+                <tr>
+                    <td>
+                        @if($menu->image)
+                            <img src="{{ asset('storage/'.$menu->image) }}" class="menu-img" alt="{{ $menu->name }}">
+                        @else
+                            <span class="no-img">Tidak ada</span>
+                        @endif
+                    </td>
 
-@if(session('success'))
-<p class="success-msg">{{ session('success') }}</p>
-@endif
+                    <td class="menu-name">{{ $menu->name }}</td>
 
-<div class="table-wrapper">
+                    <td class="menu-price">{{ $menu->formattedPrice }}</td>
 
-<table class="menu-table">
+                    <td class="menu-actions">
+                        <a href="{{ route('admin.menu.edit', $menu->id) }}" class="btn-edit">Edit</a>
 
-<thead>
-<tr>
-<th>Gambar</th>
-<th>Nama Menu</th>
-<th>Harga</th>
-<th>Aksi</th>
-</tr>
-</thead>
+                        {{-- Hapus pakai popuphapus.js --}}
+                        <button
+                            class="btn-hapus btn-delete"
+                            data-url="{{ route('admin.menu.delete', $menu->id) }}"
+                            data-method="DELETE"
+                            data-title="Hapus Menu"
+                            data-message="Yakin ingin menghapus menu ini?"
+                            data-item-name="{{ $menu->name }}"
+                        >
+                            Hapus
+                        </button>
+                    </td>
+                </tr>
 
-<tbody>
+                @empty
+                <tr>
+                    <td colspan="4" class="empty-text">Belum ada menu ditambahkan</td>
+                </tr>
+                @endforelse
 
-@forelse($menus as $menu)
-
-<tr>
-
-<td>
-
-@if($menu->image)
-
-<img src="{{ asset('storage/'.$menu->image) }}" class="menu-img">
-
-@else
-
-<span class="no-img">Tidak ada</span>
-
-@endif
-
-</td>
-
-<td class="menu-name">
-{{ $menu->name }}
-</td>
-
-<td class="menu-price">
-Rp {{ number_format($menu->price,0,',','.') }}
-</td>
-
-<td class="menu-actions">
-
-<a href="{{ route('admin.menu.edit',$menu->id) }}" class="btn-edit">
-Edit
-</a>
-
-<form action="{{ route('admin.menu.delete',$menu->id) }}" method="POST" class="delete-form">
-
-@csrf
-@method('DELETE')
-
-<button type="submit" class="btn-delete">
-Hapus
-</button>
-
-</form>
-
-</td>
-
-</tr>
-
-@empty
-
-<tr>
-
-<td colspan="4" class="empty-text">
-Belum ada menu ditambahkan
-</td>
-
-</tr>
-
-@endforelse
-
-</tbody>
-
-</table>
-
-</div>
+            </tbody>
+        </table>
+    </div>
 
 </div>
 

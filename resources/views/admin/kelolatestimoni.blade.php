@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title','Kelola Testimoni')
+@section('title', 'Kelola Testimoni')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('plugins/adminCSS/kelolatestimoni.css') }}">
@@ -10,75 +10,69 @@
 
 <div class="admin-container">
 
-<h2>Kelola Testimoni</h2>
+    <h2>Kelola Testimoni</h2>
 
-@if(session('success'))
-<p class="success-msg">{{ session('success') }}</p>
-@endif
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
-<table class="table-testimoni">
+    <div class="table-wrapper">
+        <table class="table-testimoni">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Customer</th>
+                    <th>Foto</th>
+                    <th>Isi Testimoni</th>
+                    <th>Rating</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
 
-<thead>
-<tr>
-<th>No</th>
-<th>Customer</th>
-<th>Foto</th>
-<th>Isi Testimoni</th>
-<th>Rating</th>
-<th>Aksi</th>
-</tr>
-</thead>
+                @forelse($testimonis as $t)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
 
-<tbody>
+                    <td>{{ $t->user->username }}</td>
 
-@foreach($testimonis as $t)
+                    <td>
+                        @if($t->foto)
+                            <img src="{{ asset('storage/'.$t->foto) }}"
+                                 width="80"
+                                 style="border-radius:6px;"
+                                 alt="Foto {{ $t->user->username }}">
+                        @else
+                            <span style="color:#aaa;font-size:12px;">Tidak ada</span>
+                        @endif
+                    </td>
 
-<tr>
+                    <td>{{ Str::limit($t->isi, 80) }}</td>
 
-<td>{{ $loop->iteration }}</td>
+                    <td>{{ $t->rating }} ⭐</td>
 
-<td>{{ $t->user->name }}</td>
+                    <td>
+                        {{-- Semua role admin bisa hapus testimoni --}}
+                        <button class="btn-hapus btn-delete"
+                            data-url="{{ route('admin.testimoni.destroy', $t->id) }}"
+                            data-method="DELETE"
+                            data-title="Hapus Testimoni"
+                            data-message="Yakin ingin menghapus testimoni ini?"
+                            data-item-name="{{ $t->user->username }}">
+                            Hapus
+                        </button>
+                    </td>
+                </tr>
 
-<td>
-@if($t->foto)
-<img src="{{ asset('storage/'.$t->foto) }}" width="80">
-@endif
-</td>
+                @empty
+                <tr>
+                    <td colspan="6" class="empty-text">Belum ada testimoni</td>
+                </tr>
+                @endforelse
 
-<td>{{ $t->isi }}</td>
-
-<td>{{ $t->rating }} ⭐</td>
-
-<td>
-
-@if(auth()->user()->role == 'owner')
-
-<form action="{{ route('admin.testimoni.delete',$t->id) }}" method="POST">
-
-@csrf
-@method('DELETE')
-
-<button class="btn-delete">
-Hapus
-</button>
-
-</form>
-
-@else
-
-<span>-</span>
-
-@endif
-
-</td>
-
-</tr>
-
-@endforeach
-
-</tbody>
-
-</table>
+            </tbody>
+        </table>
+    </div>
 
 </div>
 

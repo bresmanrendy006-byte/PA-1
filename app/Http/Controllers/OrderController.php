@@ -21,21 +21,21 @@ class OrderController extends Controller
 public function checkout()
 {
 
-$userId = Auth::id();
+    $userId = Auth::id();
 
-$hasPendingOrder = Order::where('user_id',$userId)
-->where('status','pending')
-->exists();
+    $hasPendingOrder = Order::where('user_id',$userId)
+    ->where('status','pending')
+    ->exists();
 
-if($hasPendingOrder){
+    if($hasPendingOrder){
 
-$pendingOrder = Order::where('user_id',$userId)
-->where('status','pending')
-->first();
+    $pendingOrder = Order::where('user_id',$userId)
+    ->where('status','pending')
+    ->first();
 
-return redirect()
-->route('orders.show',$pendingOrder->id)
-->with('error','Pesanan sebelumnya masih menunggu konfirmasi.');
+    return redirect()
+    ->route('orders.show',$pendingOrder->id)
+    ->with('error','Pesanan sebelumnya masih menunggu konfirmasi.');
 
 }
 
@@ -85,14 +85,14 @@ return redirect()
 ->with('success','Pesanan berhasil dibuat.');
 
 }
-catch(Exception $e){
+    catch(Exception $e){
 
-DB::rollBack();
+    DB::rollBack();
 
-return redirect()->back()
-->with('error','Gagal membuat pesanan.');
+    return redirect()->back()
+    ->with('error','Gagal membuat pesanan.');
 
-}
+    }
 
 }
 
@@ -120,7 +120,7 @@ $carts = Cart::with('menu')
 ->where('user_id',Auth::id())
 ->get();
 
-return view('guest.cart.index', compact('orders','carts'));
+return view('guest.orders.index', compact('orders'));
 
 }
 

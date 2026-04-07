@@ -40,13 +40,16 @@ class ProfileController extends Controller
             $profile->owner_photo = $request->file('owner_photo')->store('owner','public');
         }
 
-        $profile->owner_name = $request->owner_name;
-        $profile->owner_description = $request->owner_description;
-        $profile->history = $request->history;
-        $profile->experience = $request->experience;
-        $profile->location_name = $request->location_name;
-        $profile->latitude = $request->latitude;
-        $profile->longitude = $request->longitude;
+        $request->validate([
+            'owner_name'        => 'required|string|max:255',
+            'owner_description' => 'required|string',
+            'history'           => 'required|string',
+            'experience'        => 'required|string',
+            'location_name'     => 'required|string|max:255',
+            'latitude'          => 'nullable|numeric|between:-90,90',
+            'longitude'         => 'nullable|numeric|between:-180,180',
+            'owner_photo'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
         $profile->save();
 

@@ -9,90 +9,83 @@ use Illuminate\Support\Facades\Storage;
 
 class TestimoniController extends Controller
 {
-
     public function index()
     {
         $testimonis = Testimoni::with('user')->latest()->get();
         return view('guest.testimoni', compact('testimonis'));
     }
 
-
     public function store(Request $request)
     {
-
         $request->validate([
-            'isi' => 'required',
+            'isi'    => 'required|string|max:1000',
             'rating' => 'required|integer|min:1|max:5',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'foto'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $fotoPath = null;
 
-        if($request->hasFile('foto')){
-            $fotoPath = $request->file('foto')->store('testimoni','public');
+        if ($request->hasFile('foto')) {
+            $fotoPath = $request->file('foto')->store('testimoni', 'public');
         }
 
         Testimoni::create([
             'user_id' => Auth::id(),
-            'isi' => $request->isi,
-            'rating' => $request->rating,
-            'foto' => $fotoPath
+            'isi'     => $request->isi,
+            'rating'  => $request->rating,
+            'foto'    => $fotoPath,
         ]);
 
-        return back()->with('success','Testimoni berhasil ditambahkan');
+        return back()->with('success', 'Testimoni berhasil ditambahkan.');
     }
-
 
     public function update(Request $request, $id)
     {
-
         $testimoni = Testimoni::findOrFail($id);
 
-        if($testimoni->user_id != Auth::id()){
-            abort(403);
+        // Pastikan hanya pemilik yang bisa edit
+        if ($testimoni->user_id !== Auth::id()) {
+            abort(403, 'Akses ditolak.');
         }
 
         $request->validate([
-            'isi' => 'required',
+            'isi'    => 'required|string|max:1000',
             'rating' => 'required|integer|min:1|max:5',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'foto'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
         $data = [
-            'isi' => $request->isi,
-            'rating' => $request->rating
+            'isi'    => $request->isi,
+            'rating' => $request->rating,
         ];
 
-        if($request->hasFile('foto')){
-
-            if($testimoni->foto){
+        if ($request->hasFile('foto')) {
+            if ($testimoni->foto) {
                 Storage::disk('public')->delete($testimoni->foto);
             }
-
-            $data['foto'] = $request->file('foto')->store('testimoni','public');
+            $data['foto'] = $request->file('foto')->store('testimoni', 'public');
         }
 
         $testimoni->update($data);
 
-        return back()->with('success','Testimoni berhasil diupdate');
+        return back()->with('success', 'Testimoni berhasil diupdate.');
     }
-
 
     public function destroy($id)
     {
-
         $testimoni = Testimoni::findOrFail($id);
 
-        if(Auth::user()->role == 'owner' || $testimoni->user_id == Auth::id()){
-
-            if($testimoni->foto){
-                Storage::disk('public')->delete($testimoni->foto);
-            }
-
-            $testimoni->delete();
+        // Hanya pemilik testimoni yang boleh hapus
+        if ($testimoni->user_id !== Auth::id()) {
+            abort(403, 'Akses ditolak.');
         }
 
-        return back()->with('success','Testimoni berhasil dihapus');
-    }
+        if ($testimoni->foto) {
+            Storage::disk('public')->delete($testimoni->foto);
+        }
 
+        $testimoni->delete();
+
+        return back()->with('success', 'Testimoni berhasil dihapus.');
+    }
 }

@@ -81,7 +81,7 @@ public function history()
 {
 
 $orders = Order::with('items.menu','user')
-->where('status','confirmed')
+->whereIn('status', ['confirmed', 'rejected'])
 ->latest()
 ->get();
 

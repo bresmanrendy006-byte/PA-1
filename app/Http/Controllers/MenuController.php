@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
-
     public function index()
     {
         $menus = Menu::latest()->get();
@@ -22,21 +21,21 @@ class MenuController extends Controller
 
     public function store(Request $request)
     {
-
         $data = $request->validate([
-            'name'=>'required',
-            'description'=>'nullable',
-            'price'=>'required|numeric',
-            'image'=>'nullable|image'
+            'name'        => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price'       => 'required|numeric|min:0',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        if($request->hasFile('image')){
-            $data['image'] = $request->file('image')->store('menu','public');
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('menu', 'public');
         }
 
         Menu::create($data);
 
-        return redirect()->route('admin.menu.index')->with('success','Menu berhasil ditambahkan');
+        return redirect()->route('admin.menu.index')
+            ->with('success', 'Menu berhasil ditambahkan');
     }
 
     public function edit(Menu $menu)
@@ -46,45 +45,41 @@ class MenuController extends Controller
 
     public function update(Request $request, Menu $menu)
     {
-
         $data = $request->validate([
-            'name'=>'required',
-            'description'=>'nullable',
-            'price'=>'required|numeric',
-            'image'=>'nullable|image'
+            'name'        => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price'       => 'required|numeric|min:0',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        if($request->hasFile('image')){
-
-            if($menu->image){
+        if ($request->hasFile('image')) {
+            if ($menu->image) {
                 Storage::disk('public')->delete($menu->image);
             }
-
-            $data['image'] = $request->file('image')->store('menu','public');
+            $data['image'] = $request->file('image')->store('menu', 'public');
         }
 
         $menu->update($data);
 
-        return redirect()->route('admin.menu.index')->with('success','Menu berhasil diupdate');
+        return redirect()->route('admin.menu.index')
+            ->with('success', 'Menu berhasil diupdate');
     }
 
     public function destroy(Menu $menu)
     {
-
-        if($menu->image){
+        if ($menu->image) {
             Storage::disk('public')->delete($menu->image);
         }
 
         $menu->delete();
 
-        return back()->with('success','Menu berhasil dihapus');
+        return back()->with('success', 'Menu berhasil dihapus');
     }
 
-    // halaman guest
+    // Halaman guest & customer
     public function guestMenu()
     {
-        $menus = Menu::all();
+        $menus = Menu::latest()->get();
         return view('guest.menu', compact('menus'));
     }
-
 }

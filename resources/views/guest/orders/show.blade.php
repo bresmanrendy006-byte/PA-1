@@ -107,7 +107,3 @@
 </div>
 
 @endsection
-
-@push('scripts')
-<script src="{{ asset('plugins/js/popuphapus.js') }}"></script>
-@endpush

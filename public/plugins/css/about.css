@@ -57,13 +57,6 @@
     line-height:1.6;
 }
 
-/* OWNER */
-.owner-name{
-    font-size:1.4rem;
-    font-weight:700;
-    margin-bottom:10px;
-}
-
 /* OWNER SECTION */
 .about-owner{
     display:flex;
@@ -113,39 +106,6 @@
     border:none;
 }
 
-.about-left {
-    flex: 1;
-}
-
-.about-left h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-}
-
-.about-left p {
-    margin-bottom: 1rem;
-    opacity: 0.85;
-}
-
-.about-stats {
-    display: flex;
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.stat-item h3 {
-    font-size: 2rem;
-    color: #ffd700;
-}
-
-.about-right {
-    flex: 1;
-}
-
-.about-right img {
-    width: 100%;
-    border-radius: 20px;
-}
 
 /* Responsive */
 @media screen and (max-width: 768px) {
@@ -166,6 +126,13 @@
     .owner-image img{
         width:180px;
         height:180px;
+    }
+
+    .about-hero h1 {
+        font-size: 2rem;
+    }
+    .about-main {
+        padding: 3rem 1.5rem;
     }
 }
 

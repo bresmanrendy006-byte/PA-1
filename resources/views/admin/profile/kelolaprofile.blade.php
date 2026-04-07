@@ -9,7 +9,7 @@
 <h2>Kelola Profile Kedanku Coffee</h2>
 
 @if(session('success'))
-<p style="color:green">{{ session('success') }}</p>
+<div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
 <div class="profile-card">

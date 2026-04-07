@@ -1,305 +1,342 @@
-/* HERO */
-.testimoni-hero{
-height:40vh;
-background:linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),
-url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1600&q=80');
-background-size:cover;
-background-position:center;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-color:white;
+/* =========================
+   HERO
+   CATATAN: Simpan gambar di public/plugins/img/testimoni-hero.jpg
+========================= */
+
+.testimoni-hero {
+    height: 40vh;
+    background:
+        linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.7)),
+        url('/plugins/img/testimoni-hero.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
 }
 
-.testimoni-hero h1{
-font-size:2.8rem;
-margin-bottom:10px;
+.testimoni-hero h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
 }
 
-.testimoni-hero p{
-font-size:1.1rem;
-opacity:.9;
+.testimoni-hero p {
+    font-size: 1.1rem;
+    opacity: .9;
 }
 
-/* SECTION */
-.testimoni-section{
-padding:60px 20px;
-background:#111;
-color:white;
+
+/* =========================
+   SECTION
+========================= */
+
+.testimoni-section {
+    padding: 60px 20px;
+    background: #111;
+    color: white;
 }
 
-.testimoni-container{
-max-width:1100px;
-margin:auto;
+.testimoni-container {
+    max-width: 1100px;
+    margin: auto;
 }
 
-/* FORM */
-.form-testimoni{
-background:#1a1a1a;
-padding:25px;
-border-radius:15px;
-margin-bottom:40px;
-border:1px solid rgba(255,215,0,.2);
+
+/* =========================
+   ALERT
+========================= */
+
+.alert {
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    transition: opacity .3s;
 }
 
-.form-testimoni h2{
-color:#ffd700;
-margin-bottom:15px;
+.alert-success {
+    background: rgba(46, 204, 113, .2);
+    border: 1px solid #2ecc71;
+    color: #2ecc71;
+}
+
+.alert-danger {
+    background: rgba(231, 76, 60, .2);
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+}
+
+.alert-danger ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+
+/* =========================
+   FORM TAMBAH TESTIMONI
+========================= */
+
+.form-testimoni {
+    background: #1a1a1a;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 40px;
+    border: 1px solid rgba(255,215,0,.2);
+}
+
+.form-testimoni h2 {
+    color: #ffd700;
+    margin-bottom: 15px;
 }
 
 .form-testimoni textarea,
 .form-testimoni select,
-.form-testimoni input{
-width:100%;
-padding:10px;
-margin-bottom:12px;
-border-radius:8px;
-border:1px solid #333;
-background:#111;
-color:white;
+.form-testimoni input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #111;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
 }
 
 .form-testimoni textarea:focus,
-.form-testimoni select:focus{
-border-color:#ffd700;
-outline:none;
+.form-testimoni select:focus {
+    border-color: #ffd700;
+    outline: none;
 }
 
-.form-testimoni button{
-width:100%;
-padding:12px;
-border:none;
-border-radius:8px;
-background:#ffd700;
-font-weight:bold;
-cursor:pointer;
-transition:.2s;
+.form-testimoni button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #ffd700;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: .2s;
 }
 
-.form-testimoni button:hover{
-opacity:.9;
+.form-testimoni button:hover {
+    opacity: .9;
 }
 
-/* GRID */
-.testimoni-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:25px;
+
+/* =========================
+   GRID
+========================= */
+
+.testimoni-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
 }
 
-/* CARD */
-.testimoni-card{
-background:#1a1a1a;
-border-radius:15px;
-overflow:hidden;
-border:1px solid rgba(255,215,0,.1);
-transition:.3s;
-display:flex;
-flex-direction:column;
+
+/* =========================
+   CARD
+========================= */
+
+.testimoni-card {
+    background: #1a1a1a;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid rgba(255,215,0,.1);
+    transition: .3s;
+    display: flex;
+    flex-direction: column;
 }
 
-.testimoni-card:hover{
-transform:translateY(-5px);
-box-shadow:0 10px 25px rgba(0,0,0,.4);
+.testimoni-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,.4);
 }
 
-/* FOTO */
-.foto-wrapper{
-aspect-ratio:1/1;
-overflow:hidden;
+
+/* =========================
+   FOTO
+========================= */
+
+.foto-wrapper {
+    aspect-ratio: 1/1;
+    overflow: hidden;
 }
 
-.foto-testimoni{
-width:100%;
-height:100%;
-object-fit:cover;
+.foto-testimoni {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* CONTENT */
-.card-content{
-padding:18px;
-display:flex;
-flex-direction:column;
-flex:1;
+
+/* =========================
+   CARD CONTENT
+========================= */
+
+.card-content {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
-.isi-testimoni{
-font-style:italic;
-border-left:3px solid #ffd700;
-padding-left:10px;
-margin-bottom:15px;
-color:#ddd;
+.isi-testimoni {
+    font-style: italic;
+    border-left: 3px solid #ffd700;
+    padding-left: 10px;
+    margin-bottom: 15px;
+    color: #ddd;
 }
 
-.customer strong{
-color:#ffd700;
+.customer strong {
+    color: #ffd700;
 }
 
-.rating{
-margin-top:5px;
-letter-spacing:2px;
+.rating {
+    margin-top: 5px;
+    letter-spacing: 2px;
 }
 
-/* BUTTON */
-.aksi-testimoni{
-display:flex;
-gap:10px;
-margin-top:15px;
+
+/* =========================
+   AKSI BUTTONS
+========================= */
+
+.aksi-testimoni {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
 }
 
-.btn-edit{
-background:#3498db;
-color:white;
-border:none;
-padding:7px 14px;
-border-radius:6px;
-cursor:pointer;
+.btn-edit {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
 }
 
-.btn-edit:hover{
-opacity:.85;
+.btn-edit:hover {
+    opacity: .85;
 }
 
-.btn-hapus{
-background:#e74c3c;
-color:white;
-border:none;
-padding:7px 14px;
-border-radius:6px;
-cursor:pointer;
+/* Khusus tombol hapus testimoni customer
+   Pakai nama berbeda agar tidak konflik dengan popuphapus.js */
+.btn-delete-testimoni {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
 }
 
-.btn-hapus:hover{
-opacity:.85;
+.btn-delete-testimoni:hover {
+    opacity: .85;
 }
 
-.btn-cancel{
-background:#777;
-color:white;
-border:none;
-padding:7px 14px;
-border-radius:6px;
-cursor:pointer;
+.btn-cancel {
+    background: #777;
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* EDIT MODE */
-.edit-mode{
-display:none;
-padding:15px;
+.btn-cancel:hover {
+    opacity: .85;
+}
+
+
+/* =========================
+   EDIT MODE
+========================= */
+
+.edit-mode {
+    display: none;
+    padding: 15px;
 }
 
 .edit-mode textarea,
 .edit-mode select,
-.edit-mode input{
-width:100%;
-padding:8px;
-background:#111;
-border:1px solid #333;
-color:white;
-border-radius:6px;
+.edit-mode input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    background: #111;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
 }
 
-/* ================= POPUP MODAL ================= */
-
-/* OVERLAY */
-.popup-overlay{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.7);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:999;
+.edit-mode textarea:focus,
+.edit-mode select:focus {
+    border-color: #ffd700;
+    outline: none;
 }
 
-/* BOX */
-.popup-box{
-background:#1a1a1a;
-padding:25px;
-border-radius:12px;
-text-align:center;
-width:320px;
-color:white;
-border:1px solid rgba(255,215,0,.2);
-animation:popupFade .3s ease;
+
+/* =========================
+   PREVIEW FOTO
+========================= */
+
+.preview-foto {
+    width: 110px;
+    margin-top: 10px;
+    border-radius: 8px;
+    display: none;
 }
 
-.popup-box h3{
-margin-bottom:10px;
-color:#ffd700;
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.no-testimoni {
+    text-align: center;
+    padding: 50px;
+    background: #1a1a1a;
+    border-radius: 15px;
+    grid-column: 1 / -1;
 }
 
-/* BUTTON */
-.popup-btn{
-margin-top:20px;
-display:flex;
-gap:10px;
-justify-content:center;
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+    .testimoni-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.popup-btn button{
-padding:8px 15px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
+@media (max-width: 600px) {
+    .testimoni-grid {
+        grid-template-columns: 1fr;
+    }
 
-/* ANIMATION */
-@keyframes popupFade{
-from{
-transform:scale(.8);
-opacity:0;
-}
-to{
-transform:scale(1);
-opacity:1;
-}
-}
+    .testimoni-hero h1 {
+        font-size: 1.8rem;
+    }
 
-/* PREVIEW */
-.preview-foto{
-width:110px;
-margin-top:10px;
-border-radius:8px;
-display:none;
-}
+    .testimoni-hero p {
+        font-size: 0.95rem;
+    }
 
-/* EMPTY */
-.no-testimoni{
-text-align:center;
-padding:50px;
-background:#1a1a1a;
-border-radius:15px;
-grid-column:1/-1;
-}
-
-/* ALERT */
-.alert{
-padding:12px;
-border-radius:8px;
-margin-bottom:20px;
-transition:.3s;
-}
-
-.alert-success{
-background:rgba(46,204,113,.2);
-border:1px solid #2ecc71;
-color:#2ecc71;
-}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-.testimoni-grid{
-grid-template-columns:repeat(2,1fr);
-}
-}
-
-@media(max-width:600px){
-.testimoni-grid{
-grid-template-columns:1fr;
-}
+    .testimoni-section {
+        padding: 40px 15px;
+    }
 }

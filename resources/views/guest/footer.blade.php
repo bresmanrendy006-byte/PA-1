@@ -51,7 +51,7 @@
 
             <div class="social-icons">
 
-                <a href="https://www.instagram.com/kedanku_balige/#" target="_blank" aria-label="Instagram">
+                <a href="https://www.instagram.com/kedanku_balige/" target="_blank" aria-label="Instagram">
                     <i class="fab fa-instagram"></i>
                 </a>
 

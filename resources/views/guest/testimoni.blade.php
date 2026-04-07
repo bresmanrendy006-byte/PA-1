@@ -19,275 +19,202 @@
 <section class="testimoni-section">
 <div class="testimoni-container">
 
-{{-- SUCCESS MESSAGE --}}
-@if(session('success'))
-<div class="alert alert-success">
-{{ session('success') }}
-</div>
-@endif
+    {{-- ALERT MESSAGES --}}
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
-{{-- FORM TAMBAH TESTIMONI --}}
-@auth
-<div class="form-testimoni">
+    @if(session('error'))
+        <div class="alert alert-danger">{{ session('error') }}</div>
+    @endif
 
-<h2>✍️ Kirim Testimoni</h2>
+    {{-- FORM TAMBAH TESTIMONI --}}
+    @auth
+    @if(Auth::user()->role === 'customer')
+    <div class="form-testimoni">
 
-<form action="{{ route('testimoni.store') }}" method="POST" enctype="multipart/form-data" id="formTestimoni">
-@csrf
+        <h2>✍️ Kirim Testimoni</h2>
 
-<div class="form-group">
-<textarea name="isi" rows="4" placeholder="Tulis pengalaman kamu di Kedanku Coffee..." required>{{ old('isi') }}</textarea>
-</div>
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-<div class="form-group">
-<select name="rating" required>
-<option value="5">⭐⭐⭐⭐⭐ - Luar biasa!</option>
-<option value="4">⭐⭐⭐⭐ - Bagus</option>
-<option value="3">⭐⭐⭐ - Cukup</option>
-<option value="2">⭐⭐ - Kurang</option>
-<option value="1">⭐ - Buruk</option>
-</select>
-</div>
+        <form action="{{ route('testimoni.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
 
-<div class="form-group">
-<input type="file" name="foto" accept="image/*" onchange="previewImage(event)">
-<img id="preview" class="preview-foto" alt="Preview foto">
-</div>
+            <div class="form-group">
+                <textarea name="isi" rows="4"
+                    placeholder="Tulis pengalaman kamu di Kedanku Coffee..."
+                    required>{{ old('isi') }}</textarea>
+            </div>
 
-<button type="submit">
-<span>📝</span> Kirim Testimoni
-</button>
+            <div class="form-group">
+                <select name="rating" required>
+                    <option value="5" {{ old('rating', '5') == '5' ? 'selected' : '' }}>⭐⭐⭐⭐⭐ - Luar biasa!</option>
+                    <option value="4" {{ old('rating') == '4' ? 'selected' : '' }}>⭐⭐⭐⭐ - Bagus</option>
+                    <option value="3" {{ old('rating') == '3' ? 'selected' : '' }}>⭐⭐⭐ - Cukup</option>
+                    <option value="2" {{ old('rating') == '2' ? 'selected' : '' }}>⭐⭐ - Kurang</option>
+                    <option value="1" {{ old('rating') == '1' ? 'selected' : '' }}>⭐ - Buruk</option>
+                </select>
+            </div>
 
-</form>
-</div>
-@endauth
+            <div class="form-group">
+                <input type="file" name="foto" accept="image/*" onchange="previewImage(event)">
+                <img id="preview" class="preview-foto" alt="Preview foto" style="display:none;">
+            </div>
 
+            <button type="submit">
+                <span>📝</span> Kirim Testimoni
+            </button>
 
-{{-- GRID TESTIMONI --}}
-<div class="testimoni-grid">
-
-@forelse($testimonis as $t)
-
-<div class="testimoni-card">
-
-{{-- FOTO --}}
-@if($t->foto)
-<div class="foto-wrapper">
-<img src="{{ asset('storage/'.$t->foto) }}" class="foto-testimoni" alt="Foto {{ $t->user->name }}">
-</div>
-@endif
-
-
-{{-- MODE LIHAT --}}
-<div id="lihat{{ $t->id }}" class="card-content">
-
-<p class="isi-testimoni">
-"{{ $t->isi }}"
-</p>
-
-<div class="customer">
-<strong>{{ $t->user->name }}</strong>
-
-<div class="rating">
-@for($i=1;$i<=5;$i++)
-@if($i <= $t->rating)
-⭐
-@else
-☆
-@endif
-@endfor
-</div>
-
-</div>
+        </form>
+    </div>
+    @endif
+    @endauth
 
 
-@auth
-@if(Auth::id() == $t->user_id)
+    {{-- GRID TESTIMONI --}}
+    <div class="testimoni-grid">
 
-<div class="aksi-testimoni">
+        @forelse($testimonis as $t)
 
-<button onclick="editTestimoni({{ $t->id }})" class="btn-edit">
-✏️ Edit
-</button>
+        <div class="testimoni-card">
 
-<form action="{{ route('testimoni.destroy',$t->id) }}" method="POST" onsubmit="return bukaPopup(this)">
-@csrf
-@method('DELETE')
+            {{-- FOTO --}}
+            @if($t->foto)
+                <div class="foto-wrapper">
+                    <img src="{{ asset('storage/'.$t->foto) }}"
+                         class="foto-testimoni"
+                         alt="Foto {{ $t->user->username }}">
+                </div>
+            @endif
 
-<button type="submit" class="btn-hapus">
-🗑️ Hapus
-</button>
+            {{-- MODE LIHAT --}}
+            <div id="lihat{{ $t->id }}" class="card-content">
 
-</form>
+                <p class="isi-testimoni">"{{ $t->isi }}"</p>
 
-</div>
+                <div class="customer">
+                    <strong>{{ $t->user->username }}</strong>
+                    <div class="rating">
+                        @for($i = 1; $i <= 5; $i++)
+                            {{ $i <= $t->rating ? '⭐' : '☆' }}
+                        @endfor
+                    </div>
+                </div>
 
-@endif
-@endauth
+                @auth
+                @if(Auth::id() === $t->user_id)
+                <div class="aksi-testimoni">
 
-</div>
+                    <button onclick="editTestimoni({{ $t->id }})" class="btn-edit">
+                        ✏️ Edit
+                    </button>
 
+                    {{-- Hapus pakai popuphapus.js --}}
+                    <button class="btn-hapus btn-delete-testimoni"
+                        data-url="{{ route('testimoni.destroy', $t->id) }}"
+                        data-method="DELETE"
+                        data-title="Hapus Testimoni"
+                        data-message="Yakin ingin menghapus testimoni ini?"
+                        data-item-name="Testimoni kamu">
+                        🗑️ Hapus
+                    </button>
 
-{{-- MODE EDIT --}}
-<div id="edit{{ $t->id }}" class="edit-mode">
+                </div>
+                @endif
+                @endauth
 
-<form action="{{ route('testimoni.update',$t->id) }}" method="POST" enctype="multipart/form-data">
+            </div>
 
-@csrf
-@method('PUT')
+            {{-- MODE EDIT --}}
+            <div id="edit{{ $t->id }}" class="edit-mode" style="display:none;">
 
-<textarea name="isi" rows="3" required>{{ $t->isi }}</textarea>
+                <form action="{{ route('testimoni.update', $t->id) }}"
+                      method="POST"
+                      enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
 
-<select name="rating">
-<option value="5" {{ $t->rating==5?'selected':'' }}>⭐⭐⭐⭐⭐</option>
-<option value="4" {{ $t->rating==4?'selected':'' }}>⭐⭐⭐⭐</option>
-<option value="3" {{ $t->rating==3?'selected':'' }}>⭐⭐⭐</option>
-<option value="2" {{ $t->rating==2?'selected':'' }}>⭐⭐</option>
-<option value="1" {{ $t->rating==1?'selected':'' }}>⭐</option>
-</select>
+                    <textarea name="isi" rows="3" required>{{ $t->isi }}</textarea>
 
-<input type="file" name="foto" accept="image/*">
+                    <select name="rating">
+                        <option value="5" {{ $t->rating == 5 ? 'selected' : '' }}>⭐⭐⭐⭐⭐</option>
+                        <option value="4" {{ $t->rating == 4 ? 'selected' : '' }}>⭐⭐⭐⭐</option>
+                        <option value="3" {{ $t->rating == 3 ? 'selected' : '' }}>⭐⭐⭐</option>
+                        <option value="2" {{ $t->rating == 2 ? 'selected' : '' }}>⭐⭐</option>
+                        <option value="1" {{ $t->rating == 1 ? 'selected' : '' }}>⭐</option>
+                    </select>
 
-<div class="aksi-testimoni">
+                    <input type="file" name="foto" accept="image/*">
 
-<button type="submit" class="btn-edit">
-💾 Simpan
-</button>
+                    <div class="aksi-testimoni">
+                        <button type="submit" class="btn-edit">💾 Simpan</button>
+                        <button type="button" onclick="batalEdit({{ $t->id }})" class="btn-cancel">❌ Batal</button>
+                    </div>
 
-<button type="button" onclick="batalEdit({{ $t->id }})" class="btn-cancel">
-❌ Batal
-</button>
+                </form>
+            </div>
 
-</div>
+        </div>
 
-</form>
+        @empty
 
-</div>
+        <div class="no-testimoni">
+            <p>✨ Belum ada testimoni pelanggan.</p>
+            <p style="font-size:0.9rem;margin-top:5px;">Jadilah yang pertama memberikan testimoni!</p>
+        </div>
 
-</div>
+        @endforelse
 
-@empty
-
-<div class="no-testimoni">
-<p>✨ Belum ada testimoni pelanggan.</p>
-<p style="font-size:0.9rem;margin-top:5px;">Jadilah yang pertama memberikan testimoni!</p>
-</div>
-
-@endforelse
-
-</div>
+    </div>
 </div>
 </section>
 
-
-{{-- POPUP KONFIRMASI HAPUS --}}
-<div id="popupHapus" class="popup-overlay">
-
-<div class="popup-box">
-
-<h3>Konfirmasi</h3>
-<p>Yakin ingin menghapus testimoni ini?</p>
-
-<div class="popup-btn">
-
-<button onclick="tutupPopup()" class="btn-cancel">
-Batal
-</button>
-
-<button id="btnConfirmHapus" class="btn-hapus">
-Hapus
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<script>
-
-function editTestimoni(id){
-document.getElementById("lihat"+id).style.display="none";
-document.getElementById("edit"+id).style.display="block";
-}
-
-function batalEdit(id){
-document.getElementById("lihat"+id).style.display="flex";
-document.getElementById("edit"+id).style.display="none";
-}
-
-
-function previewImage(event){
-
-const preview=document.getElementById("preview");
-const file=event.target.files[0];
-
-if(file){
-
-const reader=new FileReader();
-
-reader.onload=function(e){
-preview.src=e.target.result;
-preview.style.display="block";
-}
-
-reader.readAsDataURL(file);
-
-}else{
-
-preview.style.display="none";
-preview.src="";
-
-}
-
-}
-
-
-setTimeout(function(){
-
-const alerts=document.querySelectorAll('.alert');
-
-alerts.forEach(function(alert){
-
-alert.style.opacity='0';
-
-setTimeout(function(){
-alert.remove();
-},300);
-
-});
-
-},3000);
-
-
-
-let formHapus=null;
-
-function bukaPopup(form){
-
-formHapus=form;
-
-document.getElementById("popupHapus").style.display="flex";
-
-return false;
-
-}
-
-function tutupPopup(){
-
-document.getElementById("popupHapus").style.display="none";
-
-}
-
-document.getElementById("btnConfirmHapus").onclick=function(){
-
-if(formHapus){
-formHapus.submit();
-}
-
-}
-
-</script>
-
 @endsection
+
+@push('scripts')
+<script src="{{ asset('plugins/js/popuphapus.js') }}"></script>
+<script>
+function editTestimoni(id) {
+    document.getElementById('lihat' + id).style.display = 'none';
+    document.getElementById('edit' + id).style.display = 'block';
+}
+
+function batalEdit(id) {
+    document.getElementById('lihat' + id).style.display = 'flex';
+    document.getElementById('edit' + id).style.display = 'none';
+}
+
+function previewImage(event) {
+    const preview = document.getElementById('preview');
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.src = e.target.result;
+            preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.style.display = 'none';
+        preview.src = '';
+    }
+}
+
+// Auto-hide alerts setelah 3 detik
+setTimeout(function() {
+    document.querySelectorAll('.alert').forEach(function(alert) {
+        alert.style.transition = 'opacity 0.3s';
+        alert.style.opacity = '0';
+        setTimeout(function() { alert.remove(); }, 300);
+    });
+}, 3000);
+</script>
+@endpush

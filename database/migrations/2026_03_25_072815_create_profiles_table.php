@@ -20,8 +20,8 @@ return new class extends Migration
         $table->text('history');
         $table->text('experience');
         $table->string('location_name');
-        $table->string('latitude');
-        $table->string('longitude');
+        $table->decimal('latitude', 10, 7)->nullable();
+        $table->decimal('longitude', 10, 7)->nullable();
         $table->timestamps();
     });
     }
