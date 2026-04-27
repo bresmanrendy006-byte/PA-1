@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Menu;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,12 @@ class CartController extends Controller
 
         $totalItems = $carts->sum('quantity');
 
-        return view('guest.cart.index', compact('carts', 'total', 'totalItems'));
+        // Cek apakah ada pesanan pending
+        $pendingOrder = Order::where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->first();
+
+        return view('guest.cart.index', compact('carts', 'total', 'totalItems', 'pendingOrder'));
     }
 
     /**
@@ -37,40 +43,43 @@ class CartController extends Controller
         try {
             $validated = $request->validate([
                 'quantity' => 'required|integer|min:1',
-                'notes' => 'nullable|string|max:500'
+                'notes'    => 'nullable|string|max:500',
             ]);
 
             $menu = Menu::findOrFail($menuId);
 
-            // Gunakan updateOrCreate untuk efisiensi
-            $cart = Cart::updateOrCreate(
-                [
-                    'user_id' => Auth::id(),
-                    'menu_id' => $menuId
-                ],
-                [
-                    'quantity' => DB::raw("quantity + {$validated['quantity']}"),
-                    'notes' => $validated['notes'] ?? null
-                ]
-            );
+            $cart = Cart::where('user_id', Auth::id())
+                ->where('menu_id', $menuId)
+                ->first();
 
-            // Refresh untuk mendapatkan nilai quantity terbaru
+            if ($cart) {
+                $cart->increment('quantity', $validated['quantity']);
+                $cart->update(['notes' => $validated['notes'] ?? $cart->notes]);
+            } else {
+                $cart = Cart::create([
+                    'user_id'  => Auth::id(),
+                    'menu_id'  => $menuId,
+                    'quantity' => $validated['quantity'],
+                    'notes'    => $validated['notes'] ?? null,
+                ]);
+            }
+
             $cart->refresh();
 
-            $message = $cart->wasRecentlyCreated 
-                ? 'Item berhasil ditambahkan ke keranjang!' 
+            $message = $cart->wasRecentlyCreated
+                ? 'Item berhasil ditambahkan ke keranjang!'
                 : 'Jumlah pesanan diperbarui di keranjang!';
 
             if ($request->ajax()) {
                 return response()->json([
-                    'success' => true,
-                    'message' => $message,
+                    'success'   => true,
+                    'message'   => $message,
                     'cart_count' => $this->getCartCountData(),
                     'cart_item' => [
-                        'id' => $cart->id,
+                        'id'       => $cart->id,
                         'quantity' => $cart->quantity,
-                        'subtotal' => $cart->subtotal
-                    ]
+                        'subtotal' => $cart->subtotal,
+                    ],
                 ]);
             }
 
@@ -81,20 +90,18 @@ class CartController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Validasi gagal',
-                    'errors' => $e->errors()
+                    'errors'  => $e->errors(),
                 ], 422);
             }
-            
             return redirect()->back()->withErrors($e->errors())->withInput();
-            
+
         } catch (\Exception $e) {
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Gagal menambahkan item: ' . $e->getMessage()
+                    'message' => 'Gagal menambahkan item.',
                 ], 500);
             }
-            
             return redirect()->back()->with('error', 'Gagal menambahkan item ke keranjang.');
         }
     }
@@ -106,23 +113,21 @@ class CartController extends Controller
     {
         try {
             $validated = $request->validate([
-                'quantity' => 'required|integer|min:1|max:999'
+                'quantity' => 'required|integer|min:1|max:999',
             ]);
 
             $cart = Cart::where('id', $id)
                 ->where('user_id', Auth::id())
                 ->firstOrFail();
 
-            $cart->update([
-                'quantity' => $validated['quantity']
-            ]);
+            $cart->update(['quantity' => $validated['quantity']]);
 
             $response = [
-                'success' => true,
-                'message' => 'Jumlah item berhasil diperbarui',
-                'subtotal' => $cart->subtotal,
-                'cart_count' => $this->getCartCountData(),
-                'formatted_subtotal' => $cart->formatted_subtotal
+                'success'           => true,
+                'message'           => 'Jumlah item berhasil diperbarui',
+                'subtotal'          => $cart->subtotal,
+                'cart_count'        => $this->getCartCountData(),
+                'formatted_subtotal' => $cart->formatted_subtotal,
             ];
 
             if ($request->ajax()) {
@@ -136,20 +141,18 @@ class CartController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Validasi gagal',
-                    'errors' => $e->errors()
+                    'errors'  => $e->errors(),
                 ], 422);
             }
-            
             return redirect()->back()->withErrors($e->errors());
-            
+
         } catch (\Exception $e) {
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Gagal memperbarui item: ' . $e->getMessage()
+                    'message' => 'Gagal memperbarui item.',
                 ], 500);
             }
-            
             return redirect()->back()->with('error', 'Gagal memperbarui keranjang.');
         }
     }
@@ -167,9 +170,9 @@ class CartController extends Controller
             $cart->delete();
 
             $response = [
-                'success' => true,
-                'message' => 'Item berhasil dihapus dari keranjang',
-                'cart_count' => $this->getCartCountData()
+                'success'    => true,
+                'message'    => 'Item berhasil dihapus dari keranjang',
+                'cart_count' => $this->getCartCountData(),
             ];
 
             if (request()->ajax()) {
@@ -182,10 +185,9 @@ class CartController extends Controller
             if (request()->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Gagal menghapus item: ' . $e->getMessage()
+                    'message' => 'Gagal menghapus item.',
                 ], 500);
             }
-            
             return redirect()->back()->with('error', 'Gagal menghapus item dari keranjang.');
         }
     }
@@ -216,7 +218,7 @@ class CartController extends Controller
     {
         return response()->json([
             'success' => true,
-            'count' => $this->getCartCountData()
+            'count'   => $this->getCartCountData(),
         ]);
     }
 
@@ -226,26 +228,5 @@ class CartController extends Controller
     private function getCartCountData()
     {
         return Cart::where('user_id', Auth::id())->sum('quantity');
-    }
-
-    /**
-     * Get cart summary (optional - for checkout)
-     */
-    public function summary()
-    {
-        $carts = Cart::with('menu')
-            ->where('user_id', Auth::id())
-            ->get();
-
-        $summary = [
-            'items' => $carts,
-            'total_items' => $carts->sum('quantity'),
-            'total_price' => $carts->sum(function ($cart) {
-                return $cart->quantity * $cart->menu->price;
-            }),
-            'item_count' => $carts->count()
-        ];
-
-        return response()->json($summary);
     }
 }

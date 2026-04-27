@@ -10,24 +10,64 @@
 
 <section class="auth-section">
     <div class="auth-container">
-        <h2>Register</h2>
+
+        <h2>Daftar Akun</h2>
+
+        {{-- ERROR VALIDASI --}}
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        {{-- SUCCESS --}}
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+
         <form action="{{ route('register.process') }}" method="POST">
-        @csrf
+            @csrf
 
-        <input type="text" name="username" placeholder="Nama Lengkap" required>
+            <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                value="{{ old('username') }}"
+                required>
 
-        <input type="email" name="email" placeholder="Email" required>
+            <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value="{{ old('email') }}"
+                required>
 
-        <input type="password" name="password" placeholder="Password" required>
+            <input
+                type="password"
+                name="password"
+                placeholder="Password (min. 6 karakter)"
+                required>
 
-        <button type="submit">Daftar</button>
+            {{-- WAJIB ADA — untuk validasi 'confirmed' --}}
+            <input
+                type="password"
+                name="password_confirmation"
+                placeholder="Konfirmasi Password"
+                required>
+
+            <button type="submit">Daftar</button>
 
         </form>
 
         <p class="auth-switch">
-            Sudah punya akun? 
+            Sudah punya akun?
             <a href="{{ route('login') }}">Login di sini</a>
         </p>
+
     </div>
 </section>
 

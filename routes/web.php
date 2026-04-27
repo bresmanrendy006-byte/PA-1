@@ -76,11 +76,14 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::prefix('orders')->name('orders.')->group(function () {
-        Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
-        Route::get('/', [OrderController::class, 'index'])->name('index');
-        Route::get('/{id}', [OrderController::class, 'show'])->name('show');
-        Route::delete('/{id}/cancel', [OrderController::class, 'cancel'])->name('cancel');
-        Route::delete('/{id}', [OrderController::class, 'destroy'])->name('destroy');
+    Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+    Route::get('/', [OrderController::class, 'index'])->name('index');
+    Route::get('/{id}', [OrderController::class, 'show'])->name('show');
+    Route::delete('/{id}/cancel', [OrderController::class, 'cancel'])->name('cancel');
+    Route::delete('/{id}', [OrderController::class, 'destroy'])->name('destroy');
+
+    // Tambahkan ini
+    Route::post('/{id}/edit-to-cart', [OrderController::class, 'editToCart'])->name('editToCart');
     });
 
 

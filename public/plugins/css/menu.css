@@ -60,11 +60,12 @@
 ========================= */
 
 .menu-card {
-    background: white;
+    background: #ffffff;
     border-radius: 12px;
     overflow: hidden;
+    border: 1px solid rgba(255,215,0,.1);
     border-style: groove;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 5px 20px rgba(255, 238, 0, 0.08);
     transition: 0.3s;
 }
 
@@ -95,7 +96,7 @@
 
 .menu-info p {
     font-size: 14px;
-    color: #666;
+    color: #000000;
     margin-bottom: 14px;
 }
 
@@ -113,7 +114,7 @@
 .price {
     font-weight: bold;
     font-size: 18px;
-    color: #6b3e26;
+    color: #cd8c63;
 }
 
 

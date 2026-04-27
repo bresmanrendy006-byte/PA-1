@@ -417,3 +417,63 @@ font-size:14px;
 color:#777;
 text-align:center;
 }
+
+/* Alert Warning - pending order */
+.alert-warning {
+    background: linear-gradient(135deg, #fff8e1, #fff3cd);
+    border: 1px solid #ffc107;
+    color: #856404;
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.alert-warning i {
+    font-size: 20px;
+    color: #ffc107;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.alert-warning p {
+    margin: 4px 0 10px;
+    font-size: 14px;
+}
+
+.btn-lihat-pesanan {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffc107;
+    color: #333;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.btn-lihat-pesanan:hover {
+    background: #e0a800;
+}
+
+/* Tombol disabled */
+.btn-disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    filter: grayscale(40%);
+}
+
+/* Tombol pending di empty cart */
+.btn-pending {
+    background: #ffc107;
+    color: #333;
+}
+
+.btn-pending:hover {
+    background: #e0a800;
+}

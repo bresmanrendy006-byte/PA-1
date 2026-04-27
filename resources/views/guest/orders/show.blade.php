@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Detail Pesanan')
+@section('title', 'Detail Pesanan')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('plugins/css/order-detail.css') }}">
@@ -12,26 +12,52 @@
 
     <h1 class="order-title">Detail Pesanan</h1>
 
+    @if(session('success'))
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span>{{ session('success') }}</span>
+        </div>
+    @endif
+
     @if(session('error'))
-        <div class="alert-error">
-            {{ session('error') }}
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ session('error') }}</span>
         </div>
     @endif
 
     {{-- ORDER INFO --}}
     <div class="order-info">
         <p><strong>ID Pesanan :</strong> #{{ $order->id }}</p>
+        <p><strong>Tanggal :</strong> {{ $order->created_at->format('d M Y, H:i') }}</p>
         <p>
             <strong>Status :</strong>
             @if($order->status == 'pending')
-                <span class="status pending">Menunggu Konfirmasi</span>
+                <span class="status pending">
+                    <i class="fas fa-clock"></i> Menunggu Konfirmasi
+                </span>
             @elseif($order->status == 'confirmed')
-                <span class="status confirmed">Pesanan Dikonfirmasi</span>
+                <span class="status confirmed">
+                    <i class="fas fa-check-circle"></i> Pesanan Dikonfirmasi
+                </span>
             @elseif($order->status == 'rejected')
-                <span class="status rejected">Pesanan Ditolak</span>
+                <span class="status rejected">
+                    <i class="fas fa-times-circle"></i> Pesanan Ditolak
+                </span>
             @endif
         </p>
     </div>
+
+    {{-- INFO KONFIRMASI --}}
+    @if($order->status == 'confirmed')
+        <div class="confirmed-info">
+            <i class="fas fa-store"></i>
+            <div>
+                <strong>Pesanan kamu sudah dikonfirmasi!</strong>
+                <p>Tunjukkan nomor pesanan <strong>#{{ $order->id }}</strong> ke kasir dan lakukan pembayaran cash.</p>
+            </div>
+        </div>
+    @endif
 
     {{-- ORDER TABLE --}}
     <div class="order-table">
@@ -48,9 +74,9 @@
                 @foreach($order->items as $item)
                     <tr>
                         <td class="menu-name">{{ $item->menu->name }}</td>
-                        <td>Rp {{ number_format($item->price,0,',','.') }}</td>
+                        <td>Rp {{ number_format($item->price, 0, ',', '.') }}</td>
                         <td>{{ $item->quantity }}</td>
-                        <td>Rp {{ number_format($item->price * $item->quantity,0,',','.') }}</td>
+                        <td>Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -61,17 +87,30 @@
     <div class="order-total">
         <h3>
             Total Pembayaran
-            <span>Rp {{ number_format($order->total_price,0,',','.') }}</span>
+            <span>Rp {{ number_format($order->total_price, 0, ',', '.') }}</span>
         </h3>
     </div>
 
     {{-- ACTIONS --}}
     <div class="order-actions">
-        <a href="{{ route('orders.index') }}" class="btn-back">Kembali</a>
 
-        {{-- BATAL PESANAN --}}
+        <a href="{{ route('orders.index') }}" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+
+        {{-- EDIT PESANAN — hanya saat pending --}}
         @if($order->status == 'pending')
-            <button type="button" 
+            <form action="{{ route('orders.editToCart', $order->id) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn-edit-order">
+                    <i class="fas fa-edit"></i> Edit Pesanan
+                </button>
+            </form>
+        @endif
+
+        {{-- BATAL PESANAN — hanya saat pending --}}
+        @if($order->status == 'pending')
+            <button type="button"
                     class="btn-remove btn-hapus"
                     data-hapus="true"
                     data-url="{{ route('orders.cancel', $order->id) }}"
@@ -82,13 +121,13 @@
                     data-confirm-text="Ya, Batalkan"
                     data-cancel-text="Batal"
                     data-item-name="Pesanan #{{ $order->id }}">
-                Batal Pesanan
+                <i class="fas fa-times"></i> Batal Pesanan
             </button>
         @endif
 
-        {{-- HAPUS PESANAN --}}
+        {{-- HAPUS PESANAN — hanya saat rejected --}}
         @if($order->status == 'rejected')
-            <button type="button" 
+            <button type="button"
                     class="btn-delete btn-hapus"
                     data-hapus="true"
                     data-url="{{ route('orders.destroy', $order->id) }}"
@@ -99,9 +138,10 @@
                     data-confirm-text="Ya, Hapus"
                     data-cancel-text="Batal"
                     data-item-name="Pesanan #{{ $order->id }}">
-                Hapus Pesanan
+                <i class="fas fa-trash"></i> Hapus Pesanan
             </button>
         @endif
+
     </div>
 
 </div>

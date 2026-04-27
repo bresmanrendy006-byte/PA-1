@@ -10,11 +10,19 @@
 
 <section class="auth-section">
     <div class="auth-container">
+
         <h2>Login</h2>
 
-        {{-- pesan error --}}
+        {{-- Pesan sukses dari register --}}
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        {{-- Pesan error login --}}
         @if(session('error'))
-            <div class="auth-error">
+            <div class="alert alert-danger">
                 {{ session('error') }}
             </div>
         @endif
@@ -22,28 +30,27 @@
         <form action="{{ route('login.process') }}" method="POST">
             @csrf
 
-            <input 
-                type="email" 
-                name="email" 
+            <input
+                type="email"
+                name="email"
                 placeholder="Email"
                 value="{{ old('email') }}"
-                required
-            >
+                required>
 
-            <input 
-                type="password" 
-                name="password" 
+            <input
+                type="password"
+                name="password"
                 placeholder="Password"
-                required
-            >
+                required>
 
             <button type="submit">Login</button>
         </form>
 
         <p class="auth-switch">
-            Belum punya akun? 
+            Belum punya akun?
             <a href="{{ route('register') }}">Daftar di sini</a>
         </p>
+
     </div>
 </section>
 
