@@ -118,7 +118,7 @@
                     </button>
 
                     {{-- Hapus pakai popuphapus.js --}}
-                    <button class="btn-hapus btn-delete-testimoni"
+                    <button type="button" class="btn-hapus btn-delete-testimoni"
                         data-url="{{ route('testimoni.destroy', $t->id) }}"
                         data-method="DELETE"
                         data-title="Hapus Testimoni"
@@ -180,7 +180,6 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('plugins/js/popuphapus.js') }}"></script>
 <script>
 function editTestimoni(id) {
     document.getElementById('lihat' + id).style.display = 'none';

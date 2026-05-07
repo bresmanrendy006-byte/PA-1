@@ -30,10 +30,6 @@
 
     <!-- Main Content -->
     <main>
-    <!-- Flash message global -->
-    @if(session('success'))
-        <div class="alert-toast success">{{ session('success') }}</div>
-    @endif
     
     @yield('content')
     </main>

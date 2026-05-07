@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title','Tambah Profile')
+@section('title', $profile ? 'Edit Profile' : 'Tambah Profile')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('plugins/adminCSS/kelolaprofile.css') }}">
@@ -9,109 +9,122 @@
 @section('content')
 
 <h2 class="page-title">
-{{ $profile ? 'Edit Profile' : 'Tambah Profile' }}
+    {{ $profile ? 'Edit Profile' : 'Tambah Profile' }}
 </h2>
+
+{{-- ERROR VALIDASI --}}
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
 
 <div class="profile-card">
 
-<form action="{{ route('admin.profile.save') }}" method="POST" enctype="multipart/form-data">
-@csrf
+    {{-- FORM UTAMA --}}
+    <form action="{{ route('admin.profile.save') }}" method="POST" enctype="multipart/form-data">
+        @csrf
 
-<div class="form-group">
-<label>Foto Pemilik</label>
-<input type="file" name="owner_photo">
+        {{-- FOTO PEMILIK --}}
+        <div class="form-group">
+            <label>Foto Pemilik</label>
 
-@if($profile && $profile->owner_photo)
-<div class="owner-preview">
-<img src="{{ asset('storage/'.$profile->owner_photo) }}">
-<form action="{{ route('admin.profile.deletePhoto') }}" method="POST">
-    @csrf
-    <button type="submit" onclick="return confirm('Yakin hapus foto?')">
-        Hapus Foto
-    </button>
-</form>
-</div>
-@endif
-</div>
+            @if($profile && $profile->owner_photo)
+                <div class="current-img">
+                    <img src="{{ asset('storage/'.$profile->owner_photo) }}"
+                         style="width:120px;border-radius:8px;">
+                    <small>Foto saat ini. Upload baru untuk mengganti.</small>
+                </div>
+            @endif
 
-<div class="form-group">
-<label>Nama Pemilik</label>
-<input type="text" name="owner_name" value="{{ $profile->owner_name ?? '' }}">
-</div>
-
-<div class="form-group">
-<label>Deskripsi Pemilik</label>
-<textarea name="owner_description">{{ $profile->owner_description ?? '' }}</textarea>
-</div>
-
-<div class="form-group">
-<label>Sejarah Kedai</label>
-<textarea name="history">{{ $profile->history ?? '' }}</textarea>
-</div>
-
-<div class="form-group">
-<label>Pengalaman Ngopi</label>
-<textarea name="experience">{{ $profile->experience ?? '' }}</textarea>
-</div>
-
-<div class="form-group">
-<label>Nama Lokasi</label>
-<input type="text" name="location_name" value="{{ $profile->location_name ?? '' }}">
-</div>
-
-<div class="location-row">
-
-<div class="form-group">
-<label>Latitude</label>
-<input type="text" name="latitude" value="{{ $profile->latitude ?? '' }}">
-</div>
-
-<div class="form-group">
-<label>Longitude</label>
-<input type="text" name="longitude" value="{{ $profile->longitude ?? '' }}">
-</div>
-
-</div>
-
-<button type="submit" class="save-btn">
-Simpan
-</button>
-
-<a href="{{ route('admin.profile.index') }}" class="cancel-btn">
-Kembali
-</a>
-
-</form>
-
-<!-- TOMBOL HAPUS PROFILE - HANYA MUNCUL JIKA PROFILE ADA -->
-@if($profile)
-<form action="{{ route('admin.profile.destroy') }}" method="POST" style="margin-top:15px;">
-@csrf
-@method('DELETE')
-
-<button type="button" class="delete-btn" style="background-color: #dc3545;" onclick="bukaPopup(this.form)">
-Hapus Profile
-</button>
-
-</form>
-@endif
-
-</div>
-
-<!-- POPUP KONFIRMASI HAPUS -->
-<div id="popupHapus" class="popup-overlay">
-    <div class="popup-box">
-        <h3>⚠️ Konfirmasi Hapus</h3>
-        <p>Apakah Anda yakin ingin menghapus profile?<br>Semua data akan hilang dan tidak dapat dikembalikan!</p>
-        <div class="popup-btn">
-            <button class="btn-confirm" id="btnConfirmHapus">Ya, Hapus</button>
-            <button class="btn-cancel" onclick="tutupPopup()">Batal</button>
+            <input type="file" name="owner_photo"
+                   accept="image/jpg,image/jpeg,image/png,image/webp">
         </div>
-    </div>
+
+        {{-- NAMA PEMILIK --}}
+        <div class="form-group">
+            <label>Nama Pemilik <span class="required">*</span></label>
+            <input type="text" name="owner_name"
+                   value="{{ old('owner_name', $profile->owner_name ?? '') }}"
+                   required>
+        </div>
+
+        {{-- DESKRIPSI --}}
+        <div class="form-group">
+            <label>Deskripsi Pemilik <span class="required">*</span></label>
+            <textarea name="owner_description" required>{{ old('owner_description', $profile->owner_description ?? '') }}</textarea>
+        </div>
+
+        {{-- SEJARAH --}}
+        <div class="form-group">
+            <label>Sejarah Kedai <span class="required">*</span></label>
+            <textarea name="history" required>{{ old('history', $profile->history ?? '') }}</textarea>
+        </div>
+
+        {{-- PENGALAMAN --}}
+        <div class="form-group">
+            <label>Pengalaman Ngopi <span class="required">*</span></label>
+            <textarea name="experience" required>{{ old('experience', $profile->experience ?? '') }}</textarea>
+        </div>
+
+        {{-- LOKASI --}}
+        <div class="form-group">
+            <label>Nama Lokasi <span class="required">*</span></label>
+            <input type="text" name="location_name"
+                   value="{{ old('location_name', $profile->location_name ?? '') }}"
+                   required>
+        </div>
+
+        {{-- LATITUDE & LONGITUDE --}}
+        <div class="location-row">
+            <div class="form-group">
+                <label>Latitude</label>
+                <input type="text" name="latitude"
+                       value="{{ old('latitude', $profile->latitude ?? '') }}"
+                       placeholder="Contoh: 2.1234567">
+            </div>
+            <div class="form-group">
+                <label>Longitude</label>
+                <input type="text" name="longitude"
+                       value="{{ old('longitude', $profile->longitude ?? '') }}"
+                       placeholder="Contoh: 99.1234567">
+            </div>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:10px;">
+            <button type="submit" class="save-btn">Simpan</button>
+            <a href="{{ route('admin.profile.index') }}" class="cancel-btn">Kembali</a>
+        </div>
+
+    </form>
+
+
+
+    {{-- HAPUS PROFILE — pakai popuphapus.js --}}
+    @if($profile)
+        <div style="margin-top:15px;">
+            <button
+                class="btn-hapus delete-btn"
+                data-url="{{ route('admin.profile.destroy') }}"
+                data-method="DELETE"
+                data-title="Hapus Profile"
+                data-message="Yakin ingin menghapus seluruh profile?"
+                data-warning="Semua data profile akan hilang dan tidak dapat dikembalikan!"
+                data-confirm-text="Ya, Hapus"
+                data-item-name="Profile Kedanku Coffee">
+                Hapus Profile
+            </button>
+        </div>
+    @endif
+
 </div>
 
 @endsection
-
-@push('scripts')
-<script src="{{ asset('plugins/js/popupdelete.js') }}"></script>
-@endpush

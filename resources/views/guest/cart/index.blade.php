@@ -111,16 +111,17 @@
                     </td>
 
                     <td>
-                        <form action="{{ route('cart.remove', $cart->id) }}"
-                              class="remove-form"
-                              method="POST"
-                              data-id="{{ $cart->id }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-remove">
-                                <i class="fas fa-trash"></i> Hapus
-                            </button>
-                        </form>
+                        <button
+                            class="btn-hapus btn-remove"
+                            data-url="{{ route('cart.remove', $cart->id) }}"
+                            data-method="DELETE"
+                            data-title="Hapus Item"
+                            data-message="Yakin ingin menghapus item ini dari keranjang?"
+                            data-item-name="{{ $cart->menu->name }}"
+                            data-confirm-text="Ya, Hapus"
+                            data-warning="Item akan dihapus dari keranjang kamu.">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
                     </td>
 
                 </tr>
@@ -168,14 +169,16 @@
             @endif
 
             {{-- Kosongkan Keranjang --}}
-            <form action="{{ route('cart.clear') }}" method="POST" style="flex:1;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn-clear"
-                        onclick="return confirm('Yakin ingin mengosongkan keranjang?')">
-                    <i class="fas fa-trash-alt"></i> Kosongkan Keranjang
-                </button>
-            </form>
+            <button
+                class="btn-hapus btn-clear"
+                data-url="{{ route('cart.clear') }}"
+                data-method="DELETE"
+                data-title="Kosongkan Keranjang"
+                data-message="Yakin ingin mengosongkan semua item di keranjang?"
+                data-warning="Semua item akan dihapus dari keranjang kamu."
+                data-confirm-text="Ya, Kosongkan">
+                <i class="fas fa-trash-alt"></i> Kosongkan Keranjang
+            </button>
 
             {{-- Checkout — nonaktif jika ada pending order --}}
             @if($pendingOrder)
