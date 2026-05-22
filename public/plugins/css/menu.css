@@ -1,7 +1,4 @@
-/* =========================
-   HERO SECTION
-   CATATAN: Simpan gambar hero di public/plugins/img/menu-hero.jpg
-========================= */
+
 
 .menu-hero {
     height: 320px;
@@ -12,7 +9,7 @@
     color: white;
     background:
         linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
-        url('/plugins/img/menu-hero.jpg');
+        url('https://img.freepik.com/foto-gratis/interior-kedai-kopi-yang-nyaman_23-2151945678.jpg?semt=ais_hybrid&w=740&q=80');
     background-size: cover;
     background-position: center;
 }
