@@ -1,0 +1,210 @@
+/* =========================
+   ADMIN PROFILE PAGE
+========================= */
+
+.profile-container {
+    padding: 35px;
+    background: #f4f6f9;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.profile-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.profile-wrapper {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* =========================
+   PROFILE CARD
+========================= */
+
+.profile-card {
+    background: white;
+    border-radius: 14px;
+    padding: 30px 25px;
+    text-align: center;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    min-width: 220px;
+    flex-shrink: 0;
+}
+
+.profile-avatar-big {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #cd8c63, #b47752);
+    color: white;
+    font-size: 32px;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+}
+
+.profile-username {
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 5px;
+}
+
+.profile-email {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.profile-role-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.profile-role-badge.owner {
+    background: #fff3e0;
+    color: #cd8c63;
+    border: 1px solid #cd8c63;
+}
+
+.profile-role-badge.karyawan {
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 1px solid #1565c0;
+}
+
+
+/* =========================
+   PASSWORD CARD
+========================= */
+
+.password-card {
+    background: white;
+    border-radius: 14px;
+    padding: 30px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    flex: 1;
+}
+
+.password-card h3 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.password-card h3 i {
+    color: #cd8c63;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.form-group input {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #cd8c63;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(205,140,99,0.1);
+}
+
+.btn-save {
+    background: #cd8c63;
+    color: white;
+    border: none;
+    padding: 11px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.btn-save:hover {
+    background: #b47752;
+    transform: translateY(-1px);
+}
+
+/* Alert */
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-danger ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 20px;
+    }
+
+    .profile-wrapper {
+        flex-direction: column;
+    }
+
+    .profile-card {
+        min-width: unset;
+        width: 100%;
+    }
+}

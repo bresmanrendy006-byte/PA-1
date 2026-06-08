@@ -33,7 +33,6 @@
                 <div class="menu-info">
 
                     <h3>{{ $menu->name }}</h3>
-
                     <p>{{ $menu->description }}</p>
 
                     <div class="menu-bottom">
@@ -107,3 +106,7 @@
 </section>
 
 @endsection
+
+@push('scripts')
+<script src="{{ asset('plugins/js/menu.js') }}"></script>
+@endpush

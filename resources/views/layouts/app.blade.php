@@ -7,6 +7,7 @@
 
     <title>@yield('title', 'Kedanku Coffee')</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('images/Logo_Kedanku.png') }}">
     <!-- Fonts - Google Fonts lebih stabil -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,8 +40,8 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('plugins/js/navbar.js') }}"></script>
-    
-    <!-- Page Specific Scripts -->
+    <script src="{{ asset('plugins/js/global.js') }}"></script>
+        <!-- Page Specific Scripts -->
      <script src="{{ asset('plugins/js/popuphapus.js') }}"></script>
     @stack('scripts')
 </body>

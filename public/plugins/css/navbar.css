@@ -225,6 +225,15 @@ body {
     color: #cd8c63;
 }
 
+@keyframes cartBounce {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.5); }
+}
+
+.cart-bounce {
+    animation: cartBounce 0.4s ease;
+}
+
 /* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
     .menu-toggle {

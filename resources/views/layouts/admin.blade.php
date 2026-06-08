@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<title>@yield('title', 'Kedanku Coffee - Admin')</title>
+<title>@yield('title', 'Kedanku Coffee')</title>
 
+<link rel="icon" type="image/png" href="{{ asset('images/Logo_Kedanku.png') }}"><link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 

@@ -30,6 +30,8 @@
         </div>
     @endif
 
+    <div id="ajaxFlashMessage"></div>
+
     {{-- NOTIFIKASI PENDING ORDER --}}
     @if($pendingOrder)
         <div class="alert alert-warning">
@@ -88,22 +90,15 @@
                     <td>Rp {{ number_format($cart->menu->price, 0, ',', '.') }}</td>
 
                     <td>
-                        <form action="{{ route('cart.update', $cart->id) }}"
-                              class="update-form"
-                              method="POST"
-                              data-id="{{ $cart->id }}">
-                            @csrf
-                            @method('PUT')
-                            <input type="number"
-                                   name="quantity"
-                                   value="{{ $cart->quantity }}"
-                                   min="1"
-                                   class="quantity-input"
-                                   data-id="{{ $cart->id }}">
-                            <button type="submit" class="btn-update">
-                                <i class="fas fa-sync-alt"></i> Update
-                            </button>
-                        </form>
+                        {{-- Input quantity — auto update saat berubah via cart.js --}}
+                        <input
+                            type="number"
+                            class="quantity-input"
+                            value="{{ $cart->quantity }}"
+                            min="1"
+                            data-id="{{ $cart->id }}"
+                            data-url="{{ route('cart.update', $cart->id) }}"
+                        >
                     </td>
 
                     <td class="subtotal-{{ $cart->id }}">
@@ -138,12 +133,12 @@
 
         <div class="summary-item">
             <span>Total Item:</span>
-            <span><strong>{{ $totalItems }}</strong> item</span>
+            <span id="totalItems"><strong>{{ $totalItems }}</strong> item</span>
         </div>
 
         <div class="summary-total">
             <span>Total Pembayaran:</span>
-            <span>Rp {{ number_format($total, 0, ',', '.') }}</span>
+            <span id="totalPrice">Rp {{ number_format($total, 0, ',', '.') }}</span>
         </div>
 
         <p class="payment-info">
@@ -206,7 +201,6 @@
         <h3>Keranjang Belanja Kosong</h3>
         <p>Belum ada item di keranjang Anda. Yuk, pesan menu favorit Anda!</p>
 
-        {{-- Mulai Belanja — nonaktif jika ada pending order --}}
         @if($pendingOrder)
             <a href="{{ route('orders.show', $pendingOrder->id) }}" class="btn-shop btn-pending">
                 <i class="fas fa-clock"></i>

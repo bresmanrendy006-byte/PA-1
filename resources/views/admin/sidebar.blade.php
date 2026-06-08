@@ -93,4 +93,17 @@
 
     </ul>
 
+    {{-- USER INFO DI SUDUT KIRI BAWAH --}}
+    <a href="{{ route('admin.userProfile') }}"
+       class="sidebar-user-info {{ request()->routeIs('admin.userProfile') ? 'active' : '' }}">
+        <div class="sidebar-user-avatar">
+            {{ strtoupper(substr(Auth::user()->username, 0, 1)) }}
+        </div>
+        <div class="sidebar-user-detail">
+            <span class="sidebar-user-name">{{ Auth::user()->username }}</span>
+            <span class="sidebar-user-role">{{ ucfirst(Auth::user()->role) }}</span>
+        </div>
+        <i class="fas fa-chevron-right sidebar-user-arrow"></i>
+    </a>
+
 </aside>

@@ -1,132 +1,146 @@
-// Cart Management System
-class CartManager {
-    constructor() {
-        this.init();
-    }
+/**
+ * cart.js
+ * Handle update quantity via AJAX (auto saat input berubah)
+ */
 
-    init() {
-        this.initializeForms();
-        this.initializeQuantityInputs();
-    }
+document.addEventListener('DOMContentLoaded', function () {
 
-    initializeForms() {
-        const updateForms = document.querySelectorAll('.update-form');
-        updateForms.forEach(form => {
-            form.addEventListener('submit', (e) => this.handleUpdate(e));
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+    // ==============================
+    // AUTO UPDATE QUANTITY
+    // ==============================
+
+    document.querySelectorAll('.quantity-input').forEach(function (input) {
+        let debounceTimer;
+
+        input.addEventListener('change', function () {
+            // Pastikan minimum 1
+            if (parseInt(input.value) < 1) input.value = 1;
+
+            const cartId  = input.dataset.id;
+            const url     = input.dataset.url;
+            const quantity = input.value;
+
+            // Debounce agar tidak spam request saat klik naik/turun cepat
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                updateQuantity(cartId, url, quantity, input);
+            }, 400);
         });
-    }
+    });
 
-    initializeQuantityInputs() {
-        const quantityInputs = document.querySelectorAll('.quantity-input');
-        quantityInputs.forEach(input => {
-            input.addEventListener('change', (e) => {
-                const form = input.closest('.update-form');
-                if (form) {
-                    if (input.value < 1) input.value = 1;
-                    form.dispatchEvent(new Event('submit'));
-                }
-            });
-        });
-    }
 
-    // Header standar untuk semua request AJAX
-    getHeaders() {
-        return {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'X-Requested-With': 'XMLHttpRequest',  // ← wajib agar Laravel kenali sebagai AJAX
-            'Accept': 'application/json',
-        };
-    }
+    // ==============================
+    // FUNGSI UPDATE QUANTITY
+    // ==============================
 
-    async handleUpdate(event) {
-        event.preventDefault();
-
-        const form = event.currentTarget;
-        const cartId = form.dataset.id;
-        const quantity = form.querySelector('input[name="quantity"]').value;
-        const updateButton = form.querySelector('.btn-update');
-
-        this.setLoading(updateButton, true);
+    async function updateQuantity(cartId, url, quantity, input) {
+        // Visual loading
+        input.style.opacity = '0.5';
 
         try {
             const formData = new FormData();
             formData.append('_method', 'PUT');
             formData.append('quantity', quantity);
 
-            const response = await fetch(`/cart/update/${cartId}`, {
+            const response = await fetch(url, {
                 method: 'POST',
-                headers: this.getHeaders(),
+                headers: {
+                    'X-CSRF-TOKEN':     csrfToken,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept':           'application/json',
+                },
                 body: formData,
             });
 
             const data = await response.json();
 
             if (data.success) {
-                this.updateSubtotal(cartId, data.subtotal);
-                this.showAlert('success', data.message);
-                if (window.updateCartCount) window.updateCartCount();
-                setTimeout(() => location.reload(), 1000);
+                // Update subtotal baris ini
+                const subtotalEl = document.querySelector(`.subtotal-${cartId}`);
+                if (subtotalEl && data.subtotal) {
+                    subtotalEl.textContent = formatRupiah(data.subtotal);
+                }
+
+                // Update cart count navbar
+                if (data.cart_count !== undefined) {
+                    window.updateCartCount(data.cart_count);
+                }
+
+                // Update total di ringkasan
+                refreshTotal();
+
+                if (data.message) {
+                    showAlert('success', data.message);
+                }
             } else {
-                this.showAlert('danger', data.message || 'Gagal memperbarui keranjang.');
+                showAlert('danger', data.message || 'Gagal memperbarui jumlah.');
             }
 
-        } catch (error) {
-            console.error('Update error:', error);
-            this.showAlert('danger', 'Terjadi kesalahan saat memperbarui keranjang.');
+        } catch (err) {
+            console.error('Update quantity error:', err);
+            alert('Terjadi kesalahan. Silakan coba lagi.');
         } finally {
-            this.setLoading(updateButton, false);
+            input.style.opacity = '1';
         }
     }
 
-    updateSubtotal(cartId, subtotal) {
-        const el = document.querySelector(`.subtotal-${cartId}`);
-        if (el) {
-            el.textContent = this.formatRupiah(subtotal);
-            el.style.backgroundColor = '#f0f0f0';
-            setTimeout(() => el.style.backgroundColor = '', 500);
-        }
-    }
 
-    formatRupiah(amount) {
+    // ==============================
+    // HELPERS
+    // ==============================
+
+    function formatRupiah(amount) {
         return 'Rp ' + new Intl.NumberFormat('id-ID').format(amount);
     }
 
-    showAlert(type, message) {
-        document.querySelectorAll('.alert').forEach(a => a.remove());
+    function showAlert(type, message) {
+        const container = document.getElementById('ajaxFlashMessage');
+        if (!container) return;
 
-        const alertDiv = document.createElement('div');
-        alertDiv.className = `alert alert-${type}`;
-        alertDiv.innerHTML = `
-            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-            <span>${message}</span>
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        container.innerHTML = `
+            <div class="alert ${alertClass}">
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                <span>${message}</span>
+            </div>
         `;
 
-        const container = document.querySelector('.cart-container');
-        const header = document.querySelector('.cart-header');
-        if (container && header) {
-            container.insertBefore(alertDiv, header.nextSibling);
-        }
+        const alertEl = container.querySelector('.alert');
+        if (!alertEl) return;
 
         setTimeout(() => {
-            alertDiv.style.transition = 'opacity 0.3s';
-            alertDiv.style.opacity = '0';
-            setTimeout(() => alertDiv.remove(), 300);
+            alertEl.style.opacity = '0';
+            setTimeout(() => {
+                if (alertEl.parentNode) {
+                    alertEl.parentNode.removeChild(alertEl);
+                }
+            }, 300);
         }, 3000);
     }
 
-    setLoading(button, isLoading) {
-        if (!button) return;
-        if (isLoading) {
-            button.disabled = true;
-            button.originalText = button.innerHTML;
-            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        } else {
-            button.disabled = false;
-            if (button.originalText) button.innerHTML = button.originalText;
-        }
-    }
-}
+    /**
+     * Hitung ulang total dari semua subtotal yang ada di DOM
+     */
+    function refreshTotal() {
+        let total = 0;
+        let totalItems = 0;
 
-document.addEventListener('DOMContentLoaded', () => {
-    new CartManager();
+        document.querySelectorAll('[class^="subtotal-"]').forEach(function (el) {
+            const angka = parseInt(el.textContent.replace(/[^0-9]/g, '')) || 0;
+            total += angka;
+        });
+
+        document.querySelectorAll('.quantity-input').forEach(function (input) {
+            totalItems += parseInt(input.value) || 0;
+        });
+
+        const totalPriceEl = document.getElementById('totalPrice');
+        const totalItemsEl = document.getElementById('totalItems');
+
+        if (totalPriceEl) totalPriceEl.textContent = formatRupiah(total);
+        if (totalItemsEl) totalItemsEl.innerHTML = `<strong>${totalItems}</strong> item`;
+    }
+
 });

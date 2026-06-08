@@ -40,26 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Update cart count (example - you can implement this with AJAX)
-    function updateCartCount() {
-        // This function should fetch cart count from your backend
-        // Example: fetch('/api/cart/count')
-        //   .then(response => response.json())
-        //   .then(data => {
-        //       document.getElementById('cartCount').textContent = data.count;
-        //   });
-        
-        // For now, just a placeholder
-        const cartCount = localStorage.getItem('cartCount') || 0;
-        const cartCountElement = document.getElementById('cartCount');
-        if (cartCountElement) {
-            cartCountElement.textContent = cartCount;
-        }
-    }
-    
-    // Call updateCartCount on page load
-    updateCartCount();
-    
     // Close mobile menu when clicking a link
     const navLinksItems = document.querySelectorAll('.nav-links a');
     navLinksItems.forEach(link => {

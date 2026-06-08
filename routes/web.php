@@ -14,6 +14,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\UserProfileController;
 
 
 /*
@@ -55,6 +56,16 @@ Route::middleware('auth')->group(function () {
 
     /*
     |--------------------------------------------------------------------------
+    | Customer Profile
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/profile', [UserProfileController::class, 'index'])->name('profile.index');
+    Route::post('/profile/change-password', [UserProfileController::class, 'changePassword'])->name('profile.changePassword');
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Cart
     |--------------------------------------------------------------------------
     */
@@ -76,14 +87,12 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::prefix('orders')->name('orders.')->group(function () {
-    Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
-    Route::get('/', [OrderController::class, 'index'])->name('index');
-    Route::get('/{id}', [OrderController::class, 'show'])->name('show');
-    Route::delete('/{id}/cancel', [OrderController::class, 'cancel'])->name('cancel');
-    Route::delete('/{id}', [OrderController::class, 'destroy'])->name('destroy');
-
-    // Tambahkan ini
-    Route::post('/{id}/edit-to-cart', [OrderController::class, 'editToCart'])->name('editToCart');
+        Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::get('/{id}', [OrderController::class, 'show'])->name('show');
+        Route::delete('/{id}/cancel', [OrderController::class, 'cancel'])->name('cancel');
+        Route::delete('/{id}', [OrderController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/edit-to-cart', [OrderController::class, 'editToCart'])->name('editToCart');
     });
 
 
@@ -121,6 +130,19 @@ Route::middleware('auth')
 
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Admin User Profile & Ganti Password
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/user-profile', [UserProfileController::class, 'adminIndex'])
+            ->name('userProfile');
+
+        Route::post('/user-profile/change-password', [UserProfileController::class, 'adminChangePassword'])
+            ->name('userProfile.changePassword');
 
 
         /*
@@ -191,10 +213,7 @@ Route::middleware('auth')
 
         Route::prefix('orders')->name('orders.')->group(function () {
             Route::get('/', [AdminOrderController::class, 'index'])->name('index');
-
-            // Static route dulu sebelum dynamic route
             Route::get('/history', [AdminOrderController::class, 'history'])->name('history');
-
             Route::post('/{id}/confirm', [AdminOrderController::class, 'confirm'])->name('confirm');
             Route::post('/{id}/reject', [AdminOrderController::class, 'reject'])->name('reject');
         });
@@ -202,7 +221,7 @@ Route::middleware('auth')
 
         /*
         |--------------------------------------------------------------------------
-        | Stock Management (owner only — tambahkan middleware di controller)
+        | Stock Management
         |--------------------------------------------------------------------------
         */
 
