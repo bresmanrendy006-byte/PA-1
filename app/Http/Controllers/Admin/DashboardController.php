@@ -3,27 +3,32 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Menu;
-use App\Models\Order;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
+use App\Models\Menu;  // Pastikan model Menu sudah di-import
+use App\Models\Order; // Pastikan model Order sudah di-import
 
 class DashboardController extends Controller
 {
-
     public function index()
     {
-
-        // total menu
+        // 1. Mengambil total menu
         $totalMenu = Menu::count();
 
-        // pesanan hari ini
-        $todayOrders = Order::whereDate('created_at', Carbon::today())->count();
+        // 2. Mengambil pesanan hari ini
+        $todayOrders = Order::whereDate('created_at', now())->count();
 
+        // 3. Mengambil total pendapatan (asumsi status 'confirmed' atau 'selesai')
+        $totalRevenue = Order::where('status', 'confirmed')->sum('total_price');
+
+        // 4. Mengambil 5 pesanan terbaru (ini yang menyebabkan error tadi)
+        $recentOrders = Order::with('user')->latest()->take(5)->get();
+
+        // Kirim semua variabel ke view
         return view('admin.dashboard', compact(
-            'totalMenu',
-            'todayOrders'
+            'totalMenu', 
+            'todayOrders', 
+            'totalRevenue', 
+            'recentOrders'
         ));
-
     }
-
 }

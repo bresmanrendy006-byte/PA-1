@@ -11,8 +11,8 @@
 
         <ul class="nav-links" id="navLinks">
             <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
-            <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">Profile</a></li>
             <li><a href="{{ route('guest.menu') }}" class="{{ request()->routeIs('guest.menu') ? 'active' : '' }}">Menu Minuman</a></li>
+            <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">Profile</a></li>
             <li><a href="{{ route('testimoni') }}" class="{{ request()->routeIs('testimoni') ? 'active' : '' }}">Testimoni</a></li>
 
             @auth

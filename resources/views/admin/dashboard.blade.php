@@ -4,66 +4,186 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('plugins/adminCSS/dashboard.css') }}">
+<style>
+    /* Styling tambahan untuk grafik agar senada dengan card lainnya */
+    .revenue-chart-card {
+        background: #ffffff;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        margin-top: 30px;
+    }
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 50px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: capitalize;
+    }
+    .status-badge.confirmed { background: #e8f5e9; color: #2e7d32; }
+    .status-badge.pending { background: #fff4e5; color: #ff9800; }
+</style>
 @endpush
 
 @section('content')
-
 <div class="dashboard-container">
+    
+    <!-- HEADER & STATS (Tetap seperti sebelumnya) -->
+ <!-- Bagian Header Dashboard -->
+<div class="dashboard-header">
+    <div class="welcome-text">
+        <h2>Welcome to Kedanku Coffee</h2>
+        <span>Ringkasan performa kedai Anda hari ini.</span>
+    </div>
+    
+    <div class="header-right">
+        <!-- FORM PENCARIAN -->
+        <form action="{{ route('admin.orders.index') }}" method="GET" class="search-bar">
+            <i class="fas fa-search" style="color: #ccc;"></i>
+            <input type="text" name="search" placeholder="Cari ID Pesanan" value="{{ request('search') }}">
+            {{-- Form otomatis terkirim saat tekan Enter --}}
+        </form>
 
-{{-- GREETING CARD --}}
-<div class="greeting-card">
-
-<div class="greeting-text">
-
-<span class="dashboard-label">Dashboard</span>
-
-<h2>
-Selamat datang,
-<b>{{ Auth::user()->username }}</b>
-</h2>
-
-<p class="role-text">
-<i class="fas {{ Auth::user()->role == 'owner' ? 'fa-crown' : 'fa-user' }}"></i>
-{{ ucfirst(Auth::user()->role) }}
-</p>
-
+        <div class="admin-profile">
+            <div class="user-avatar-circle" style="width:40px; height:40px; background:#8b5e3c; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">
+                AD
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="greeting-icon">
-<i class="fas fa-mug-hot"></i>
+    <!-- STATS CARDS (Tetap) -->
+    <div class="stats-grid">
+        <!-- ... (Kode stats cards Anda sebelumnya) ... -->
+        <div class="stat-card">
+            <div class="stat-top">
+                <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+                <span class="stat-change">Katalog</span>
+            </div>
+            <div class="stat-body">
+                <h4>Total Menu</h4>
+                <h2>{{ $totalMenu }}</h2>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 70%;"></div></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-top">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <span class="stat-change" style="color: #27ae60;">Aktif</span>
+            </div>
+            <div class="stat-body">
+                <h4>Pesanan Hari Ini</h4>
+                <h2>{{ $todayOrders }}</h2>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 45%;"></div></div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-top">
+                <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                <span class="stat-change" style="color: #27ae60;">+ Pendapatan</span>
+            </div>
+            <div class="stat-body">
+                <h4>Total Pendapatan</h4>
+                <h2>Rp {{ number_format($totalRevenue ?? 0, 0, ',', '.') }}</h2>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 85%;"></div></div>
+        </div>
+    </div>
+
+    <!-- RECENT ORDER TABLE -->
+    <div class="recent-orders">
+        <div class="card-title">
+            <h3>Recent Order</h3>
+            <a href="#" style="font-size: 12px; color: #8b5e3c; text-decoration: none;">See all</a>
+        </div>
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Items</th>
+                    <th>Date & Time</th>
+                    <th>Price</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($recentOrders as $order)
+                <tr>
+                    <td class="item-cell">
+                        <i class="fas fa-file-invoice" style="color: #8b5e3c; margin-right: 10px;"></i>
+                        Order #{{ $order->id }}
+                    </td>
+                    <td>{{ $order->created_at->format('d M Y, H:i') }}</td>
+                    <td>Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
+                    <td>Cash</td>
+                    <td><span class="status-badge {{ $order->status }}">{{ $order->status }}</span></td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </div>
-
-</div>
-
-
-{{-- CARD STATISTIK --}}
-<div class="dashboard-cards">
-
-<div class="card">
-
-<i class="fas fa-mug-hot"></i>
-
-<div>
-<h3>Total Menu</h3>
-<p>{{ $totalMenu }}</p>
-</div>
-
-</div>
-
-
-<div class="card">
-
-<i class="fas fa-receipt"></i>
-
-<div>
-<h3>Pesanan Hari Ini</h3>
-<p>{{ $todayOrders }}</p>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 @endsection
+
+@push('scripts')
+{{-- Load Chart.js --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        
+        // Membuat efek gradient untuk background grafik
+        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(139, 94, 60, 0.2)');
+        gradient.addColorStop(1, 'rgba(139, 94, 60, 0)');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'], // Sesuaikan dengan data dinamis nanti
+                datasets: [{
+                    label: 'Pendapatan',
+                    data: [150000, 220000, 180000, 242000, 110000, 374000, 300000], // Contoh data
+                    borderColor: '#8b5e3c',
+                    backgroundColor: gradient,
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4, // Membuat garis melengkung (smooth)
+                    pointRadius: 4,
+                    pointBackgroundColor: '#8b5e3c',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false } // Sembunyikan label legend agar minimalis
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false,
+                            color: 'rgba(0,0,0,0.05)'
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return 'Rp ' + value.toLocaleString();
+                            },
+                            color: '#999',
+                            font: { size: 10 }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#999', font: { size: 10 } }
+                    }
+                }
+            }
+        });
+    });
+</script>
+@endpush

@@ -8,123 +8,100 @@
 
 @section('content')
 
-<h2 class="page-title">
-    {{ $profile ? 'Edit Profile' : 'Tambah Profile' }}
-</h2>
+<h2 class="page-title">{{ $profile ? 'Edit Profile' : 'Tambah Profile' }}</h2>
 
-{{-- ERROR VALIDASI --}}
 @if($errors->any())
     <div class="alert alert-danger">
-        <ul>
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
+        <ul style="margin:0;">
+            @foreach($errors->all() as $error) <li>{{ $error }}</li> @endforeach
         </ul>
     </div>
 @endif
 
-@if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-@endif
-
 <div class="profile-card">
 
-    {{-- FORM UTAMA --}}
     <form action="{{ route('admin.profile.save') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
-        {{-- FOTO PEMILIK --}}
-        <div class="form-group">
-            <label>Foto Pemilik</label>
+        <!-- SECTION 1: IDENTITAS -->
+        <div class="form-section-header">Informasi Dasar</div>
+        
+        <div class="grid-2-cols">
+            <div class="form-group">
+                <label>Nama Pemilik <span style="color:red">*</span></label>
+                <input type="text" name="owner_name" class="form-control-custom" 
+                       value="{{ old('owner_name', $profile->owner_name ?? '') }}" required placeholder="Contoh: John Doe">
+            </div>
 
-            @if($profile && $profile->owner_photo)
-                <div class="current-img">
-                    <img src="{{ asset('storage/'.$profile->owner_photo) }}"
-                         style="width:120px;border-radius:8px;">
-                    <small>Foto saat ini. Upload baru untuk mengganti.</small>
-                </div>
-            @endif
-
-            <input type="file" name="owner_photo"
-                   accept="image/jpg,image/jpeg,image/png,image/webp">
+            <div class="form-group">
+                <label>Foto Pemilik</label>
+                <input type="file" name="owner_photo" class="form-control-custom" accept="image/*">
+                @if($profile && $profile->owner_photo)
+                    <small style="color: #28a745;">Sudah ada foto. Upload lagi untuk mengganti.</small>
+                @endif
+            </div>
         </div>
 
-        {{-- NAMA PEMILIK --}}
         <div class="form-group">
-            <label>Nama Pemilik <span class="required">*</span></label>
-            <input type="text" name="owner_name"
-                   value="{{ old('owner_name', $profile->owner_name ?? '') }}"
-                   required>
+            <label>Deskripsi Pemilik <span style="color:red">*</span></label>
+            <textarea name="owner_description" class="form-control-custom" rows="3" required placeholder="Ceritakan singkat tentang Anda...">{{ old('owner_description', $profile->owner_description ?? '') }}</textarea>
         </div>
 
-        {{-- DESKRIPSI --}}
+        <!-- SECTION 2: CERITA KEDAI -->
+        <div class="form-section-header">Cerita Kedai</div>
+
         <div class="form-group">
-            <label>Deskripsi Pemilik <span class="required">*</span></label>
-            <textarea name="owner_description" required>{{ old('owner_description', $profile->owner_description ?? '') }}</textarea>
+            <label>Sejarah Kedai <span style="color:red">*</span></label>
+            <textarea name="history" class="form-control-custom" rows="4" required placeholder="Bagaimana perjalanan Kedanku Coffee dimulai?">{{ old('history', $profile->history ?? '') }}</textarea>
         </div>
 
-        {{-- SEJARAH --}}
         <div class="form-group">
-            <label>Sejarah Kedai <span class="required">*</span></label>
-            <textarea name="history" required>{{ old('history', $profile->history ?? '') }}</textarea>
+            <label>Pengalaman Ngopi <span style="color:red">*</span></label>
+            <textarea name="experience" class="form-control-custom" rows="4" required placeholder="Apa filosofi kopi menurut Anda?">{{ old('experience', $profile->experience ?? '') }}</textarea>
         </div>
 
-        {{-- PENGALAMAN --}}
+        <!-- SECTION 3: LOKASI -->
+        <div class="form-section-header">Lokasi & Map</div>
+
         <div class="form-group">
-            <label>Pengalaman Ngopi <span class="required">*</span></label>
-            <textarea name="experience" required>{{ old('experience', $profile->experience ?? '') }}</textarea>
+            <label>Nama Lokasi / Alamat <span style="color:red">*</span></label>
+            <input type="text" name="location_name" class="form-control-custom" 
+                   value="{{ old('location_name', $profile->location_name ?? '') }}" required placeholder="Jl. Raya Coffee No. 123">
         </div>
 
-        {{-- LOKASI --}}
-        <div class="form-group">
-            <label>Nama Lokasi <span class="required">*</span></label>
-            <input type="text" name="location_name"
-                   value="{{ old('location_name', $profile->location_name ?? '') }}"
-                   required>
-        </div>
-
-        {{-- LATITUDE & LONGITUDE --}}
-        <div class="location-row">
+        <div class="grid-2-cols">
             <div class="form-group">
                 <label>Latitude</label>
-                <input type="text" name="latitude"
-                       value="{{ old('latitude', $profile->latitude ?? '') }}"
-                       placeholder="Contoh: 2.1234567">
+                <input type="text" name="latitude" class="form-control-custom" 
+                       value="{{ old('latitude', $profile->latitude ?? '') }}" placeholder="Contoh: 2.123456">
             </div>
             <div class="form-group">
                 <label>Longitude</label>
-                <input type="text" name="longitude"
-                       value="{{ old('longitude', $profile->longitude ?? '') }}"
-                       placeholder="Contoh: 99.1234567">
+                <input type="text" name="longitude" class="form-control-custom" 
+                       value="{{ old('longitude', $profile->longitude ?? '') }}" placeholder="Contoh: 99.123456">
             </div>
         </div>
 
-        <div style="display:flex;gap:10px;margin-top:10px;">
-            <button type="submit" class="save-btn">Simpan</button>
-            <a href="{{ route('admin.profile.index') }}" class="cancel-btn">Kembali</a>
+        <!-- BUTTONS -->
+        <div style="margin-top: 30px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <button type="submit" class="btn-primary-coffee">Simpan Data</button>
+                <a href="{{ route('admin.profile.index') }}" class="btn-link-cancel">Kembali</a>
+            </div>
+
+            @if($profile)
+                <button type="button" class="btn-outline-danger btn-hapus"
+                    data-url="{{ route('admin.profile.destroy') }}"
+                    data-method="DELETE"
+                    data-title="Hapus Profile"
+                    data-message="Apakah Anda yakin ingin menghapus seluruh data profile ini?"
+                    data-item-name="Profil Kedai">
+                    Hapus Profile
+                </button>
+            @endif
         </div>
 
     </form>
-
-
-
-    {{-- HAPUS PROFILE — pakai popuphapus.js --}}
-    @if($profile)
-        <div style="margin-top:15px;">
-            <button
-                class="btn-hapus delete-btn"
-                data-url="{{ route('admin.profile.destroy') }}"
-                data-method="DELETE"
-                data-title="Hapus Profile"
-                data-message="Yakin ingin menghapus seluruh profile?"
-                data-warning="Semua data profile akan hilang dan tidak dapat dikembalikan!"
-                data-confirm-text="Ya, Hapus"
-                data-item-name="Profile Kedanku Coffee">
-                Hapus Profile
-            </button>
-        </div>
-    @endif
-
 </div>
 
 @endsection

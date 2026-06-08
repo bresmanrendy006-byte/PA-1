@@ -39,11 +39,12 @@
     cursor:pointer;
 }
 
-.sidebar-menu a:hover,
-.logout-btn:hover{
-    background:rgba(255,255,255,0.2);
+/* 1. Perubahan Warna Teks & Icon saat Aktif */
+.sidebar-menu li.active a {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.15); /* Background putih transparan */
+    font-weight: 600;
 }
-
 /* =========================
    SIDEBAR USER INFO
 ========================= */

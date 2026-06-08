@@ -14,67 +14,65 @@
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
 
-@if(session('error'))
-    <div class="alert alert-danger">{{ session('error') }}</div>
-@endif
-
 <div class="profile-card">
 
     @if($profile)
-
-        {{-- FOTO --}}
-        @if($profile->owner_photo)
-            <div class="owner-preview">
-                <img src="{{ asset('storage/'.$profile->owner_photo) }}" width="150" style="border-radius:10px;">
+        {{-- HEADER: Foto & Nama --}}
+        <div class="profile-header-box">
+            <div class="img-circle-wrapper">
+                <img src="{{ $profile->owner_photo ? asset('storage/'.$profile->owner_photo) : asset('images/default-avatar.png') }}" alt="Owner">
             </div>
-            <br>
-        @endif
+            <div class="profile-main-info">
+                <span class="info-label">Pemilik Kedai</span>
+                <h3>{{ $profile->owner_name }}</h3>
+                <p style="color: #888; margin-top: 5px;">
+                    <i class="fas fa-map-marker-alt"></i> {{ $profile->location_name }}
+                </p>
+            </div>
+        </div>
 
-        <table class="profile-table">
-            <tr>
-                <th>Nama Pemilik</th>
-                <td>{{ $profile->owner_name }}</td>
-            </tr>
-            <tr>
-                <th>Deskripsi</th>
-                <td>{{ $profile->owner_description }}</td>
-            </tr>
-            <tr>
-                <th>Sejarah Kedai</th>
-                <td>{{ $profile->history }}</td>
-            </tr>
-            <tr>
-                <th>Pengalaman Ngopi</th>
-                <td>{{ $profile->experience }}</td>
-            </tr>
-            <tr>
-                <th>Lokasi</th>
-                <td>{{ $profile->location_name }}</td>
-            </tr>
-            <tr>
-                <th>Latitude</th>
-                <td>{{ $profile->latitude }}</td>
-            </tr>
-            <tr>
-                <th>Longitude</th>
-                <td>{{ $profile->longitude }}</td>
-            </tr>
-        </table>
+        {{-- GRID: Detail Informasi --}}
+        <div class="profile-info-grid">
+            <div class="info-box full-width">
+                <span class="info-label">Deskripsi Pemilik</span>
+                <div class="info-value">{{ $profile->owner_description }}</div>
+            </div>
 
-        <br>
+            <div class="info-box">
+                <span class="info-label">Sejarah Kedai</span>
+                <div class="info-value">{{ $profile->history }}</div>
+            </div>
 
-        <a href="{{ route('admin.profile.form') }}" class="save-btn">
-            Edit Profile
-        </a>
+            <div class="info-box">
+                <span class="info-label">Pengalaman Ngopi</span>
+                <div class="info-value">{{ $profile->experience }}</div>
+            </div>
+
+            <div class="info-box">
+                <span class="info-label">Koordinat Map (Latitude)</span>
+                <div class="info-value">{{ $profile->latitude ?? '-' }}</div>
+            </div>
+
+            <div class="info-box">
+                <span class="info-label">Koordinat Map (Longitude)</span>
+                <div class="info-value">{{ $profile->longitude ?? '-' }}</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            <a href="{{ route('admin.profile.form') }}" class="btn-primary-coffee">
+                Edit Profile
+            </a>
+        </div>
 
     @else
-
-        <p>Profile belum ada. Silakan tambah profile baru.</p>
-
-        <a href="{{ route('admin.profile.form') }}" class="save-btn">
-            Tambah Profile
-        </a>
-
+        {{-- Tampilan jika data kosong --}}
+        <div style="text-align: center; padding: 40px 0;">
+            <p style="color: #999; margin-bottom: 20px;">Profile belum dikonfigurasi. Silakan tambah profile baru.</p>
+            <a href="{{ route('admin.profile.form') }}" class="btn-primary-coffee">
+                + Tambah Profile Baru
+            </a>
+        </div>
     @endif
 
 </div>
