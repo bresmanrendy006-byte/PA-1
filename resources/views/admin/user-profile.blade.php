@@ -9,9 +9,15 @@
 @section('content')
 
 <div class="profile-container">
-
-    <h1 class="profile-title">Profile Akun</h1>
-
+    <div class="profile-topbar">
+        <h1 class="profile-title">Profile Akun</h1>
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </form>
+    </div>
     <div class="profile-wrapper">
 
         {{-- PROFILE INFO --}}

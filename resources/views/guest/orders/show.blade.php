@@ -7,7 +7,7 @@
 @endpush
 
 @section('content')
-
+<div class="page-white">
 <div class="order-container">
 
     <h1 class="order-title">Detail Pesanan</h1>
@@ -143,5 +143,5 @@
     @endif
 
 </div>
-
+</div>
 @endsection

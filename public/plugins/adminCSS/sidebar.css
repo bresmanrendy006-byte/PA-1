@@ -1,50 +1,61 @@
-.sidebar{
-    width:240px;
-    background:#cd8c63;
-    color:white;
-    padding:20px;
+.sidebar {
+    width: 240px;
+    background: #cd8c63;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    box-sizing: border-box;
+    flex-shrink: 0;
 }
 
-.logo{
-    font-size:20px;
-    font-weight:700;
-    margin-bottom:30px;
-    display:flex;
-    align-items:center;
-    gap:10px;
+.logo {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.sidebar-menu{
-    list-style:none;
+.sidebar-menu-wrapper {
+    flex: 1;
+    overflow-y: auto;
 }
 
-.sidebar-menu li{
-    margin-bottom:10px;
+.sidebar-menu {
+    list-style: none;
 }
 
-.sidebar-menu a,
-.logout-btn{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 12px;
-    text-decoration:none;
-    color:white;
-    border-radius:8px;
-    transition:0.2s;
-    background:none;
-    border:none;
-    width:100%;
-    font-family:'Poppins',sans-serif;
-    cursor:pointer;
+.sidebar-menu li {
+    margin-bottom: 4px;
 }
 
-/* 1. Perubahan Warna Teks & Icon saat Aktif */
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    text-decoration: none;
+    color: white;
+    border-radius: 8px;
+    transition: 0.2s;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.sidebar-menu a:hover {
+    background: rgba(255,255,255,0.2);
+}
+
 .sidebar-menu li.active a {
-    color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.15); /* Background putih transparan */
+    background: rgba(255,255,255,0.25);
     font-weight: 600;
 }
+
 /* =========================
    SIDEBAR USER INFO
 ========================= */
@@ -53,27 +64,28 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 14px 16px;
-    margin: 10px 12px;
+    padding: 12px 10px;
     border-radius: 10px;
     background: rgba(255,255,255,0.08);
     text-decoration: none;
     transition: 0.2s;
     cursor: pointer;
-    border: 1px solid rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    margin-top: 10px;
 }
 
 .sidebar-user-info:hover,
 .sidebar-user-info.active {
-    background: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.2);
 }
 
 .sidebar-user-avatar {
-    width: 38px;
-    height: 38px;
-    background: linear-gradient(135deg, #cd8c63, #b47752);
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(255,255,255,0.5);
     color: white;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     border-radius: 50%;
     display: flex;
@@ -100,7 +112,7 @@
 
 .sidebar-user-role {
     font-size: 11px;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.65);
     margin-top: 1px;
 }
 

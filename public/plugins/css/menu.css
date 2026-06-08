@@ -32,6 +32,7 @@
 .menu-section {
     padding: 70px 0;
     background: #000;
+    min-height: 100vh;
 }
 
 .menu-container {

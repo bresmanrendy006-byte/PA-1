@@ -7,7 +7,7 @@
 @endpush
 
 @section('content')
-
+<div class="page-white">
 <div class="cart-container">
 
     <div class="cart-header">
@@ -216,7 +216,7 @@
     @endif
 
 </div>
-
+</div>
 @endsection
 
 @push('scripts')
