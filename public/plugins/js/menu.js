@@ -15,9 +15,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Grup yang saling eksklusif
     const exclusiveGroups = [
-        ['Less Ice', 'Extra Ice'],
-        ['Less Sugar', 'Extra Sugar'],
-        ['Hot', 'Cold'],
+        ['Less Ice', 'Extra Ice'],        
+        ['Less Sugar', 'Extra Sugar'],    
+        ['Hot', 'Cold'],                  
+        ['Hot', 'Less Ice', 'Extra Ice'], 
     ];
 
     document.querySelectorAll('.notes-dropdown').forEach(function (dropdown) {
@@ -54,16 +55,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // Jika dicentang, uncheck semua yang segrup
                 if (this.checked) {
-                    const group = exclusiveGroups.find(g => g.includes(this.value));
-                    if (group) {
-                        group.forEach(val => {
-                            if (val !== this.value) {
-                                const sibling = Array.from(checkboxes)
-                                    .find(c => c.value === val);
-                                if (sibling) sibling.checked = false;
-                            }
+                    // Cari SEMUA grup yang mengandung nilai ini (bukan hanya yang pertama)
+                    exclusiveGroups
+                        .filter(g => g.includes(this.value))
+                        .forEach(group => {
+                            group.forEach(val => {
+                                if (val !== this.value) {
+                                    const sibling = Array.from(checkboxes)
+                                        .find(c => c.value === val);
+                                    if (sibling) sibling.checked = false;
+                                }
+                            });
                         });
-                    }
                 }
 
                 // Update hidden input & label
