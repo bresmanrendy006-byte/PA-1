@@ -36,6 +36,7 @@
     padding: 60px 20px;
     background: #111;
     color: white;
+    min-height: 100vh;
 }
 
 .testimoni-container {

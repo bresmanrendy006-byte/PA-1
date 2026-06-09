@@ -1,6 +1,7 @@
 /**
  * menu.js
- * Handle AJAX add to cart & update cart count di navbar
+ * Handle AJAX add to cart, notes dropdown multiple choice,
+ * dan update cart count di navbar
  * Bergantung pada global.js untuk fungsi updateCartCount
  */
 
@@ -9,7 +10,70 @@ document.addEventListener('DOMContentLoaded', function () {
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
     // ==============================
-    // ADD TO CART
+    // NOTES DROPDOWN
+    // ==============================
+
+    document.querySelectorAll('.notes-dropdown').forEach(function (dropdown) {
+
+        const toggle     = dropdown.querySelector('.notes-toggle');
+        const options    = dropdown.querySelector('.notes-options');
+        const chevron    = dropdown.querySelector('.notes-chevron');
+        const toggleText = dropdown.querySelector('.notes-toggle-text');
+        const hiddenInput = dropdown.querySelector('.notes-value');
+        const checkboxes = dropdown.querySelectorAll('.notes-checkbox');
+
+        // Buka/tutup dropdown
+        toggle.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const isOpen = options.classList.contains('open');
+
+            // Tutup semua dropdown lain dulu
+            document.querySelectorAll('.notes-options.open').forEach(el => {
+                el.classList.remove('open');
+                el.closest('.notes-dropdown')
+                  .querySelector('.notes-chevron')
+                  .style.transform = '';
+            });
+
+            if (!isOpen) {
+                options.classList.add('open');
+                chevron.style.transform = 'rotate(180deg)';
+            }
+        });
+
+        // Update hidden input & teks tombol saat checkbox berubah
+        checkboxes.forEach(function (cb) {
+            cb.addEventListener('change', function () {
+                const selected = Array.from(checkboxes)
+                    .filter(c => c.checked)
+                    .map(c => c.value);
+
+                hiddenInput.value = selected.join(', ');
+
+                if (selected.length === 0) {
+                    toggleText.textContent = 'Pilih Catatan';
+                } else if (selected.length === 1) {
+                    toggleText.textContent = selected[0];
+                } else {
+                    toggleText.textContent = selected.length + ' catatan dipilih';
+                }
+            });
+        });
+    });
+
+    // Tutup dropdown saat klik di luar
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.notes-options.open').forEach(el => {
+            el.classList.remove('open');
+            el.closest('.notes-dropdown')
+              .querySelector('.notes-chevron')
+              .style.transform = '';
+        });
+    });
+
+
+    // ==============================
+    // ADD TO CART (AJAX)
     // ==============================
 
     document.querySelectorAll('.add-cart-form').forEach(function (form) {
@@ -19,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const btn       = form.querySelector('.btn-add-cart');
             const savedText = btn.innerHTML;
 
-            // Loading
             btn.disabled  = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menambahkan...';
 
@@ -37,9 +100,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 const data = await response.json();
 
                 if (data.success) {
-                    // Pakai fungsi global dari global.js
+                    // Update cart count navbar via global.js
                     window.updateCartCount(data.cart_count);
-                    showBtnSuccess(btn, savedText);
+
+                    // Reset dropdown setelah berhasil
+                    const dropdown = form.querySelector('.notes-dropdown');
+                    if (dropdown) {
+                        dropdown.querySelectorAll('.notes-checkbox')
+                            .forEach(cb => cb.checked = false);
+                        dropdown.querySelector('.notes-value').value = '';
+                        dropdown.querySelector('.notes-toggle-text').textContent = 'Pilih Catatan';
+                    }
+
+                    // Reset quantity ke 1
+                    const qtyInput = form.querySelector('.qty-input');
+                    if (qtyInput) qtyInput.value = 1;
+
+                    // Feedback tombol
+                    btn.innerHTML        = '<i class="fas fa-check"></i> Ditambahkan!';
+                    btn.style.background = '#2ecc71';
+                    btn.style.color      = 'white';
+
+                    setTimeout(() => {
+                        btn.innerHTML        = savedText;
+                        btn.style.background = '';
+                        btn.style.color      = '';
+                        btn.disabled         = false;
+                    }, 1500);
+
                 } else {
                     showBtnError(btn, savedText, data.message);
                 }
@@ -53,21 +141,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     // ==============================
-    // HELPERS
+    // HELPER
     // ==============================
-
-    function showBtnSuccess(btn, savedText) {
-        btn.innerHTML        = '<i class="fas fa-check"></i> Ditambahkan!';
-        btn.style.background = '#2ecc71';
-        btn.style.color      = 'white';
-
-        setTimeout(() => {
-            btn.innerHTML        = savedText;
-            btn.style.background = '';
-            btn.style.color      = '';
-            btn.disabled         = false;
-        }, 1500);
-    }
 
     function showBtnError(btn, savedText, message) {
         btn.innerHTML = savedText;

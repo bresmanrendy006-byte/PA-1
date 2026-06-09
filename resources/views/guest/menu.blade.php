@@ -4,6 +4,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('plugins/css/menu.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/css/notes-dropdown.css') }}">
 @endpush
 
 @section('content')
@@ -50,6 +51,7 @@
                                 class="add-cart-form"
                             >
                                 @csrf
+
                                 <div class="cart-inputs">
                                     <input
                                         type="number"
@@ -58,17 +60,48 @@
                                         min="1"
                                         class="qty-input"
                                     >
-                                    <input
-                                        type="text"
-                                        name="notes"
-                                        placeholder="Catatan (optional)"
-                                        class="notes-input"
-                                    >
                                 </div>
+
+                                {{-- CATATAN DROPDOWN MULTIPLE CHOICE --}}
+                                <div class="notes-dropdown" data-id="{{ $menu->id }}">
+
+                                    <button type="button" class="notes-toggle">
+                                        <i class="fas fa-sliders-h"></i>
+                                        <span class="notes-toggle-text">Pilih Catatan</span>
+                                        <i class="fas fa-chevron-down notes-chevron"></i>
+                                    </button>
+
+                                    <div class="notes-options">
+                                        @foreach([
+                                            'Less Ice'    => 'fas fa-snowflake',
+                                            'Extra Ice'   => 'fas fa-snowflake',
+                                            'Less Sugar'  => 'fas fa-cube',
+                                            'Extra Sugar' => 'fas fa-cube',
+                                            'Hot'         => 'fas fa-fire',
+                                            'Cold'        => 'fas fa-glass-whiskey',
+                                        ] as $option => $icon)
+                                        <label class="notes-option">
+                                            <input
+                                                type="checkbox"
+                                                class="notes-checkbox"
+                                                value="{{ $option }}"
+                                            >
+                                            <i class="{{ $icon }}"></i>
+                                            <span>{{ $option }}</span>
+                                        </label>
+                                        @endforeach
+                                    </div>
+
+                                    {{-- Hidden input yang akan diisi oleh JS --}}
+                                    <input type="hidden" name="notes" class="notes-value">
+
+                                </div>
+
                                 <button type="submit" class="btn-add-cart">
                                     <i class="fas fa-shopping-cart"></i>
                                     Tambah ke Keranjang
                                 </button>
+
                             </form>
 
                         @else
