@@ -285,19 +285,43 @@
 }
 
 .btn-shop {
-    background: #cd8c63;
+    background: linear-gradient(135deg, #cd8c63, #b97a52);
     color: white;
     padding: 12px 30px;
-    border-radius: 5px;
+    border-radius: 8px;
     text-decoration: none;
     display: inline-block;
+    font-weight: 600;
+    letter-spacing: 0.4px;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(205, 140, 99, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-shop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .btn-shop:hover {
-    background: #b57a52;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(205, 140, 99, 0.3);
+    background: linear-gradient(135deg, #b97a52, #a06540);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(205, 140, 99, 0.45);
+    color: white;
+}
+
+.btn-shop:hover::after {
+    opacity: 1;
+}
+
+.btn-shop:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(205, 140, 99, 0.3);
 }
 
 /* Loading State */

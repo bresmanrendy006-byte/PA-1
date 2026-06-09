@@ -13,14 +13,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // NOTES DROPDOWN
     // ==============================
 
+    // Grup yang saling eksklusif
+    const exclusiveGroups = [
+        ['Less Ice', 'Extra Ice'],
+        ['Less Sugar', 'Extra Sugar'],
+        ['Hot', 'Cold'],
+    ];
+
     document.querySelectorAll('.notes-dropdown').forEach(function (dropdown) {
 
-        const toggle     = dropdown.querySelector('.notes-toggle');
-        const options    = dropdown.querySelector('.notes-options');
-        const chevron    = dropdown.querySelector('.notes-chevron');
-        const toggleText = dropdown.querySelector('.notes-toggle-text');
+        const toggle      = dropdown.querySelector('.notes-toggle');
+        const options     = dropdown.querySelector('.notes-options');
+        const chevron     = dropdown.querySelector('.notes-chevron');
+        const toggleText  = dropdown.querySelector('.notes-toggle-text');
         const hiddenInput = dropdown.querySelector('.notes-value');
-        const checkboxes = dropdown.querySelectorAll('.notes-checkbox');
+        const checkboxes  = dropdown.querySelectorAll('.notes-checkbox');
 
         // Buka/tutup dropdown
         toggle.addEventListener('click', function (e) {
@@ -44,6 +51,22 @@ document.addEventListener('DOMContentLoaded', function () {
         // Update hidden input & teks tombol saat checkbox berubah
         checkboxes.forEach(function (cb) {
             cb.addEventListener('change', function () {
+
+                // Jika dicentang, uncheck semua yang segrup
+                if (this.checked) {
+                    const group = exclusiveGroups.find(g => g.includes(this.value));
+                    if (group) {
+                        group.forEach(val => {
+                            if (val !== this.value) {
+                                const sibling = Array.from(checkboxes)
+                                    .find(c => c.value === val);
+                                if (sibling) sibling.checked = false;
+                            }
+                        });
+                    }
+                }
+
+                // Update hidden input & label
                 const selected = Array.from(checkboxes)
                     .filter(c => c.checked)
                     .map(c => c.value);

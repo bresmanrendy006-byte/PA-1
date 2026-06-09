@@ -46,21 +46,29 @@ class CartController extends Controller
                 'notes'    => 'nullable|string|max:500',
             ]);
 
-            $menu = Menu::findOrFail($menuId);
+            $menu  = Menu::findOrFail($menuId);
+            $notes = $validated['notes'] ?? null;
 
+            // Cari cart dengan menu_id DAN notes yang sama
             $cart = Cart::where('user_id', Auth::id())
                 ->where('menu_id', $menuId)
+                ->where(function ($query) use ($notes) {
+                    if ($notes) {
+                        $query->where('notes', $notes);
+                    } else {
+                        $query->whereNull('notes')->orWhere('notes', '');
+                    }
+                })
                 ->first();
 
             if ($cart) {
                 $cart->increment('quantity', $validated['quantity']);
-                $cart->update(['notes' => $validated['notes'] ?? $cart->notes]);
             } else {
                 $cart = Cart::create([
                     'user_id'  => Auth::id(),
                     'menu_id'  => $menuId,
                     'quantity' => $validated['quantity'],
-                    'notes'    => $validated['notes'] ?? null,
+                    'notes'    => $notes,
                 ]);
             }
 
@@ -72,10 +80,10 @@ class CartController extends Controller
 
             if ($request->ajax()) {
                 return response()->json([
-                    'success'   => true,
-                    'message'   => $message,
+                    'success'    => true,
+                    'message'    => $message,
                     'cart_count' => $this->getCartCountData(),
-                    'cart_item' => [
+                    'cart_item'  => [
                         'id'       => $cart->id,
                         'quantity' => $cart->quantity,
                         'subtotal' => $cart->subtotal,
