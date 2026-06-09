@@ -50,7 +50,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('profile.changePassword') }}" method="POST">
+            <form id="formGantiPassword" action="{{ route('profile.changePassword') }}" method="POST">
                 @csrf
 
                 <div class="form-group">
@@ -71,7 +71,14 @@
                            placeholder="Ulangi password baru" required>
                 </div>
 
-                <button type="submit" class="btn-save">
+                <button type="button"
+                    class="btn-confirm-popup btn-save"
+                    data-form="formGantiPassword"
+                    data-icon="🔐"
+                    data-title="Konfirmasi Ganti Password"
+                    data-message="Apakah Anda yakin ingin mengubah password akun Anda?<br>Pastikan Anda mengingat password baru."
+                    data-confirm-text="Ya, Ubah"
+                    data-cancel-text="Batal">
                     <i class="fas fa-save"></i> Simpan Password
                 </button>
 

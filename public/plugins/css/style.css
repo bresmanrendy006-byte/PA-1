@@ -118,6 +118,87 @@ main {
     background: #5a6268;
 }
 
+.confirm-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.confirm-overlay.active {
+    display: flex;
+}
+
+.confirm-box {
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 12px;
+    padding: 30px 28px 24px;
+    max-width: 380px;
+    width: 90%;
+    text-align: center;
+    color: white;
+    animation: popupFade .3s ease;
+}
+
+.confirm-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.confirm-box h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffd700;
+    margin-bottom: 10px;
+}
+
+.confirm-box p {
+    color: #ccc;
+    font-size: .9rem;
+    line-height: 1.6;
+    margin-bottom: 22px;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.confirm-actions .btn-ya {
+    padding: 8px 24px;
+    background: #16a34a;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+}
+
+.confirm-actions .btn-ya:hover {
+    background: #15803d;
+}
+
+.confirm-actions .btn-tidak {
+    padding: 8px 24px;
+    background: #6c757d;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+}
+
+.confirm-actions .btn-tidak:hover {
+    background: #5a6268;
+}
+
 @keyframes popupFade {
     from {
         opacity: 0;

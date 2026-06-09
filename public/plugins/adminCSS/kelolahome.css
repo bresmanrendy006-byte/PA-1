@@ -111,13 +111,7 @@
 
 /* ===== Edit Button ===== */
 .edit-btn{
-    background:#cd8c63;
-    border:none;
-    color:white;
-    padding:8px 10px;
-    border-radius:6px;
-    cursor:pointer;
-    transition:0.2s;
+    display: none;
 }
 
 .edit-btn:hover{

@@ -14,14 +14,14 @@
 
 @if(session('success'))
 <div class="alert-success">
-{{ session('success') }}
+    {{ session('success') }}
 </div>
 @endif
 
 @if($orders->isEmpty())
 
 <div class="empty-order">
-Belum ada pesanan masuk.
+    Belum ada pesanan masuk.
 </div>
 
 @else
@@ -30,88 +30,82 @@ Belum ada pesanan masuk.
 
 <div class="order-card">
 
-<div class="order-header">
+    <div class="order-header">
+        <div>Pesanan #{{ $order->id }}</div>
+        <div>Customer : {{ $order->user->username }}</div>
+        <div>Tanggal : {{ $order->created_at->format('d M Y H:i') }}</div>
+        <div class="status pending">
+            Status : Menunggu Konfirmasi
+        </div>
+    </div>
 
-<div>Pesanan #{{ $order->id }}</div>
+    <table class="order-table">
+        <thead>
+            <tr>
+                <th>Menu</th>
+                <th>Harga</th>
+                <th>Jumlah</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($order->items as $item)
+            <tr>
+                <td>{{ $item->menu->name }}</td>
+                <td>Rp {{ number_format($item->price,0,',','.') }}</td>
+                <td>{{ $item->quantity }}</td>
+                <td>Rp {{ number_format($item->price * $item->quantity,0,',','.') }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-<div>Customer : {{ $order->user->username }}</div>
+    <div class="order-footer">
 
-<div>Tanggal : {{ $order->created_at->format('d M Y H:i') }}</div>
+        <div class="order-total">
+            Total :
+            <strong>Rp {{ number_format($order->total_price,0,',','.') }}</strong>
+        </div>
 
-<div class="status pending">
-Status : Menunggu Konfirmasi
-</div>
+        <div class="order-actions">
 
-</div>
+            {{-- Form Konfirmasi --}}
+            <form id="formKonfirmasi{{ $order->id }}"
+                  action="{{ route('admin.orders.confirm', $order->id) }}"
+                  method="POST">
+                @csrf
+                <button type="button"
+                    class="btn-confirm-popup btn-confirm"
+                    data-form="formKonfirmasi{{ $order->id }}"
+                    data-icon="✅"
+                    data-title="Konfirmasi Pesanan"
+                    data-message="Apakah Anda yakin ingin mengkonfirmasi pesanan <strong>#{{ $order->id }}</strong> atas nama <strong>{{ $order->user->username }}</strong>?"
+                    data-confirm-text="Ya, Konfirmasi"
+                    data-cancel-text="Batal">
+                    Konfirmasi
+                </button>
+            </form>
 
+            {{-- Form Tolak --}}
+            <form id="formTolak{{ $order->id }}"
+                  action="{{ route('admin.orders.reject', $order->id) }}"
+                  method="POST">
+                @csrf
+                <button type="button"
+                    class="btn-confirm-popup btn-reject"
+                    data-form="formTolak{{ $order->id }}"
+                    data-icon="❌"
+                    data-title="Tolak Pesanan"
+                    data-message="Apakah Anda yakin ingin menolak pesanan <strong>#{{ $order->id }}</strong> atas nama <strong>{{ $order->user->username }}</strong>?"
+                    data-confirm-text="Ya, Tolak"
+                    data-cancel-text="Batal">
+                    Tolak
+                </button>
+            </form>
 
-<table class="order-table">
+        </div>
 
-<thead>
-<tr>
-<th>Menu</th>
-<th>Harga</th>
-<th>Jumlah</th>
-<th>Subtotal</th>
-</tr>
-</thead>
-
-<tbody>
-
-@foreach($order->items as $item)
-
-<tr>
-
-<td>{{ $item->menu->name }}</td>
-
-<td>Rp {{ number_format($item->price,0,',','.') }}</td>
-
-<td>{{ $item->quantity }}</td>
-
-<td>
-Rp {{ number_format($item->price * $item->quantity,0,',','.') }}
-</td>
-
-</tr>
-
-@endforeach
-
-</tbody>
-
-</table>
-
-
-<div class="order-footer">
-
-<div class="order-total">
-
-Total :
-<strong>
-Rp {{ number_format($order->total_price,0,',','.') }}
-</strong>
-
-</div>
-
-
-<div class="order-actions">
-
-<form action="{{ route('admin.orders.confirm',$order->id) }}" method="POST">
-@csrf
-<button class="btn-confirm">
-Konfirmasi
-</button>
-</form>
-
-<form action="{{ route('admin.orders.reject',$order->id) }}" method="POST">
-@csrf
-<button class="btn-reject">
-Tolak
-</button>
-</form>
-
-</div>
-
-</div>
+    </div>
 
 </div>
 

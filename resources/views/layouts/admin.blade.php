@@ -35,6 +35,8 @@
 
 <!-- Global Scripts -->
 <script src="{{ asset('plugins/js/popuphapus.js') }}"></script>
+<script src="{{ asset('plugins/js/popup_confirm.js') }}"></script>
+
 @stack('scripts')
 
 </body>
