@@ -100,9 +100,16 @@
 
     {{-- EDIT PESANAN — hanya saat pending --}}
     @if($order->status == 'pending')
-        <form action="{{ route('orders.editToCart', $order->id) }}" method="POST">
+        <form id="formEditPesanan" action="{{ route('orders.editToCart', $order->id) }}" method="POST">
             @csrf
-            <button type="submit" class="btn-edit-order">
+            <button type="button"
+                    class="btn-edit-order btn-confirm-popup"
+                    data-form="formEditPesanan"
+                    data-icon="✏️"
+                    data-title="Konfirmasi Edit Pesanan"
+                    data-message="Pesanan akan dipindahkan kembali ke keranjang.<br>Apakah Anda yakin ingin mengedit pesanan ini?"
+                    data-confirm-text="Ya, Edit"
+                    data-cancel-text="Batal">
                 <i class="fas fa-edit"></i> Edit Pesanan
             </button>
         </form>
