@@ -36,6 +36,13 @@
     margin-bottom: 0;
 }
 
+.menu-description {
+    max-width: 300px;
+    white-space: normal;
+    word-wrap: break-word;
+    line-height: 1.5;
+}
+
 
 /* =========================
    ADD BUTTON

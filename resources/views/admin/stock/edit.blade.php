@@ -35,6 +35,8 @@
                     name="name"
                     value="{{ old('name', $stock->name) }}"
                     placeholder="Contoh: Kopi Arabika"
+                    pattern="[A-Za-z\s]+"
+                    title="Nama bahan hanya boleh berisi huruf"
                     required>
             </div>
 
@@ -51,12 +53,12 @@
 
             <div class="form-group">
                 <label>Satuan</label>
-                <input
-                    type="text"
-                    name="unit"
-                    value="{{ old('unit', $stock->unit) }}"
-                    placeholder="Contoh: kg / liter / pcs"
-                    required>
+                <select name="unit" required>
+                    <option value="" disabled>Pilih Satuan</option>
+                    <option value="kg" {{ old('unit', $stock->unit) == 'kg' ? 'selected' : '' }}>kg</option>
+                    <option value="liter" {{ old('unit', $stock->unit) == 'liter' ? 'selected' : '' }}>liter</option>
+                    <option value="pcs" {{ old('unit', $stock->unit) == 'pcs' ? 'selected' : '' }}>pcs</option>
+                </select>
             </div>
 
             <div class="form-actions">

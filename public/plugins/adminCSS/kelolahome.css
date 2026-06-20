@@ -5,6 +5,46 @@
     margin-bottom:20px;
 }
 
+/* ===== Alert Messages ===== */
+.alert{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:14px 16px;
+    border-radius:10px;
+    margin-bottom:20px;
+    font-size:14px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+
+.alert i{
+    font-size:16px;
+    margin-top:1px;
+}
+
+.alert ul{
+    margin:4px 0 0;
+    padding-left:18px;
+}
+
+.alert-success{
+    background:#e7f6ec;
+    color:#1e7e44;
+    border:1px solid #b9e6c6;
+}
+
+.alert-danger{
+    background:#fdecea;
+    color:#c0392b;
+    border:1px solid #f3b9b3;
+}
+
+.alert-info{
+    background:#eaf3fb;
+    color:#2d6da3;
+    border:1px solid #b9d9f0;
+}
+
 /* ===== Upload Card ===== */
 .upload-card{
     background:white;

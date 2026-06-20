@@ -22,7 +22,7 @@ $orders = Order::with('items.menu','user')
 ->latest()
 ->get();
 
-return view('admin.orders.kelolapemesanan',compact('orders'));
+return view('admin.orders.index',compact('orders'));
 
 }
 
@@ -35,19 +35,13 @@ return view('admin.orders.kelolapemesanan',compact('orders'));
 
 public function confirm($id)
 {
+    $order = Order::where('status', Order::STATUS_PENDING)->findOrFail($id);
+    $order->update(['status' => Order::STATUS_CONFIRMED]);
 
-$order = Order::findOrFail($id);
-
-$order->update([
-'status' => 'confirmed'
-]);
-
-return redirect()
-->route('admin.orders.index')
-->with('success','Pesanan berhasil dikonfirmasi');
-
+    return redirect()
+        ->route('admin.orders.index')
+        ->with('success', 'Pesanan berhasil dikonfirmasi');
 }
-
 
 /*
 |--------------------------------------------------------------------------
@@ -57,17 +51,13 @@ return redirect()
 
 public function reject($id)
 {
+    $order = Order::where('status', 'pending')->findOrFail($id);
 
-$order = Order::findOrFail($id);
+    $order->update(['status' => 'rejected']);
 
-$order->update([
-'status' => 'rejected'
-]);
-
-return redirect()
-->route('admin.orders.index')
-->with('success','Pesanan ditolak');
-
+    return redirect()
+        ->route('admin.orders.index')
+        ->with('success', 'Pesanan ditolak');
 }
 
 

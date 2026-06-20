@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Stock;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 class StockController extends Controller
@@ -21,13 +22,9 @@ class StockController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name'     => 'required|string|max:255',
-            'quantity' => 'required|integer|min:0',
-            'unit'     => 'required|string|max:50',
-        ]);
+        $validated = $this->validatedData($request);
 
-        Stock::create($request->only(['name', 'quantity', 'unit']));
+        Stock::create($validated);
 
         return redirect()->route('admin.stock.index')
             ->with('success', 'Stok berhasil ditambahkan.');
@@ -41,14 +38,11 @@ class StockController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name'     => 'required|string|max:255',
-            'quantity' => 'required|integer|min:0',
-            'unit'     => 'required|string|max:50',
-        ]);
-
         $stock = Stock::findOrFail($id);
-        $stock->update($request->only(['name', 'quantity', 'unit']));
+
+        $validated = $this->validatedData($request, $stock->id);
+
+        $stock->update($validated);
 
         return redirect()->route('admin.stock.index')
             ->with('success', 'Stok berhasil diperbarui.');
@@ -57,9 +51,31 @@ class StockController extends Controller
     public function destroy($id)
     {
         $stock = Stock::findOrFail($id);
-        $stock->delete();
+
+        try {
+            $stock->delete();
+        } catch (QueryException $e) {
+            return redirect()->route('admin.stock.index')
+                ->with('error', 'Stok tidak bisa dihapus karena masih digunakan di data lain.');
+        }
 
         return redirect()->route('admin.stock.index')
             ->with('success', 'Stok berhasil dihapus.');
+    }
+
+
+    private function validatedData(Request $request, $ignoreId = null)
+    {
+        return $request->validate([
+            'name'     => [
+                'required',
+                'string',
+                'regex:/^[a-zA-Z\s]+$/',
+                'max:255',
+                'unique:stocks,name,' . $ignoreId,
+            ],
+            'quantity' => 'required|integer|min:0',
+            'unit'     => 'required|in:kg,liter,pcs',
+        ]);
     }
 }

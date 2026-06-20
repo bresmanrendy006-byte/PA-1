@@ -4,30 +4,11 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('plugins/adminCSS/dashboard.css') }}">
-<style>
-    /* Styling tambahan untuk grafik agar senada dengan card lainnya */
-    .revenue-chart-card {
-        background: #ffffff;
-        padding: 25px;
-        border-radius: 20px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-        margin-top: 30px;
-    }
-    .status-badge {
-        padding: 5px 12px;
-        border-radius: 50px;
-        font-size: 11px;
-        font-weight: 600;
-        text-transform: capitalize;
-    }
-    .status-badge.confirmed { background: #e8f5e9; color: #2e7d32; }
-    .status-badge.pending { background: #fff4e5; color: #ff9800; }
-</style>
 @endpush
 
 @section('content')
 <div class="dashboard-container">
-    
+
     <!-- HEADER & STATS (Tetap seperti sebelumnya) -->
  <!-- Bagian Header Dashboard -->
 <div class="dashboard-header">
@@ -35,7 +16,7 @@
         <h2>Welcome to Kedanku Coffee</h2>
         <span>Ringkasan performa kedai Anda hari ini.</span>
     </div>
-    
+
     <div class="header-right">
         <!-- FORM PENCARIAN -->
         <form action="{{ route('admin.orders.index') }}" method="GET" class="search-bar">
@@ -46,7 +27,7 @@
 
         <div class="admin-profile">
             <div class="user-avatar-circle" style="width:40px; height:40px; background:#8b5e3c; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">
-                AD
+                {{ strtoupper(substr(auth()->user()->username, 0, 2)) }}
             </div>
         </div>
     </div>
@@ -128,62 +109,5 @@
 @push('scripts')
 {{-- Load Chart.js --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const ctx = document.getElementById('revenueChart').getContext('2d');
-        
-        // Membuat efek gradient untuk background grafik
-        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-        gradient.addColorStop(0, 'rgba(139, 94, 60, 0.2)');
-        gradient.addColorStop(1, 'rgba(139, 94, 60, 0)');
-
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'], // Sesuaikan dengan data dinamis nanti
-                datasets: [{
-                    label: 'Pendapatan',
-                    data: [150000, 220000, 180000, 242000, 110000, 374000, 300000], // Contoh data
-                    borderColor: '#8b5e3c',
-                    backgroundColor: gradient,
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4, // Membuat garis melengkung (smooth)
-                    pointRadius: 4,
-                    pointBackgroundColor: '#8b5e3c',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false } // Sembunyikan label legend agar minimalis
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            drawBorder: false,
-                            color: 'rgba(0,0,0,0.05)'
-                        },
-                        ticks: {
-                            callback: function(value) {
-                                return 'Rp ' + value.toLocaleString();
-                            },
-                            color: '#999',
-                            font: { size: 10 }
-                        }
-                    },
-                    x: {
-                        grid: { display: false },
-                        ticks: { color: '#999', font: { size: 10 } }
-                    }
-                }
-            }
-        });
-    });
-</script>
+<script src="{{ asset('plugins/adminJS/dashboard.js') }}"></script>
 @endpush

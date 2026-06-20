@@ -134,6 +134,15 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.03);
 }
 
+/* Card grafik pendapatan (dipindahkan dari <style> inline di dashboard.blade.php) */
+.revenue-chart-card {
+    background: var(--card-white);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    margin-top: 30px;
+}
+
 .card-title {
     display: flex;
     justify-content: space-between;
@@ -206,3 +215,16 @@
     height: 35px;
     border-radius: 8px;
 }
+
+/* Badge status pesanan (dipindahkan dari <style> inline di dashboard.blade.php) */
+.status-badge {
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.status-badge.confirmed { background: #e8f5e9; color: #2e7d32; }
+.status-badge.pending { background: #fff4e5; color: #ff9800; }
+.status-badge.rejected { background: #fff4e5; color: #ff0000; }

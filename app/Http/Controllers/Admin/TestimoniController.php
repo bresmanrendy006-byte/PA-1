@@ -10,20 +10,19 @@ class TestimoniController extends Controller
 {
     public function index()
     {
-        $testimonis = Testimoni::with('user')->latest()->get();
-        return view('admin.kelolatestimoni', compact('testimonis'));
+        $testimonials = Testimoni::with('user')->latest()->get();
+        return view('admin.testimoni.index', compact('testimonials'));
     }
 
     public function destroy($id)
     {
-        $testimoni = Testimoni::findOrFail($id);
+        $testimonial = Testimoni::findOrFail($id);
 
-        // Hapus foto dari storage jika ada
-        if ($testimoni->foto) {
-            Storage::disk('public')->delete($testimoni->foto);
+        if ($testimonial->photo) {
+            Storage::disk('public')->delete($testimonial->photo);
         }
 
-        $testimoni->delete();
+        $testimonial->delete();
 
         return back()->with('success', 'Testimoni berhasil dihapus.');
     }

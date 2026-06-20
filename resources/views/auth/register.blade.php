@@ -49,7 +49,7 @@
             <input
                 type="password"
                 name="password"
-                placeholder="Password (min. 6 karakter)"
+                placeholder="Password (min. 8 karakter)"
                 required>
 
             {{-- WAJIB ADA — untuk validasi 'confirmed' --}}

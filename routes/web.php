@@ -1,20 +1,28 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HomeImageController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AboutController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\TestimoniController;
-use App\Http\Controllers\Admin\TestimoniController as AdminTestimoniController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Auth\AuthController;
+
+use App\Http\Controllers\About\AboutController;
+
+use App\Http\Controllers\Home\HomeController;
+use App\Http\Controllers\Home\HomeImageController;
+
+use App\Http\Controllers\Menu\MenuController;
+
+use App\Http\Controllers\Cart\CartController;
+
+use App\Http\Controllers\Order\OrderController;
+
+use App\Http\Controllers\Profile\ProfileController;
+use App\Http\Controllers\Profile\UserProfileController;
+
+use App\Http\Controllers\Testimoni\TestimoniController;
+
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\StockController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\Admin\TestimoniController as AdminTestimoniController;
 
 
 /*
@@ -117,7 +125,7 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('auth')
+Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
@@ -153,11 +161,13 @@ Route::middleware('auth')
 
         Route::prefix('home')->name('home.')->group(function () {
             Route::get('/', [HomeImageController::class, 'index'])->name('index');
-            Route::post('/', [HomeImageController::class, 'store'])->name('store');
-            Route::put('/{id}', [HomeImageController::class, 'update'])->name('update');
-            Route::delete('/{id}', [HomeImageController::class, 'destroy'])->name('delete');
-        });
 
+            Route::middleware('owner')->group(function () {
+                Route::post('/', [HomeImageController::class, 'store'])->name('store');
+                Route::put('/{id}', [HomeImageController::class, 'update'])->name('update');
+                Route::delete('/{id}', [HomeImageController::class, 'destroy'])->name('delete');
+            });
+        });
 
         /*
         |--------------------------------------------------------------------------
@@ -167,27 +177,36 @@ Route::middleware('auth')
 
         Route::prefix('profile')->name('profile.')->group(function () {
             Route::get('/', [ProfileController::class, 'index'])->name('index');
-            Route::get('/form', [ProfileController::class, 'form'])->name('form');
-            Route::post('/save', [ProfileController::class, 'save'])->name('save');
-            Route::delete('/clear', [ProfileController::class, 'clear'])->name('clear');
-            Route::post('/delete-photo', [ProfileController::class, 'deletePhoto'])->name('deletePhoto');
-            Route::delete('/destroy', [ProfileController::class, 'destroy'])->name('destroy');
+
+            Route::middleware('owner')->group(function () {
+                Route::get('/form', [ProfileController::class, 'form'])->name('form');  // ← pindah ke sini
+                Route::post('/save', [ProfileController::class, 'save'])->name('save');
+                Route::delete('/clear', [ProfileController::class, 'clear'])->name('clear');
+                Route::post('/delete-photo', [ProfileController::class, 'deletePhoto'])->name('deletePhoto');
+                Route::delete('/destroy', [ProfileController::class, 'destroy'])->name('destroy');
+            });
         });
 
 
         /*
         |--------------------------------------------------------------------------
         | Menu Management
+        | index dibuka untuk semua admin-area (owner & karyawan), sama seperti
+        | Stock Management di bawah; create/store/edit/update/delete dibatasi
+        | ke owner lewat middleware 'owner' (bukan lagi inline check di controller).
         |--------------------------------------------------------------------------
         */
 
         Route::prefix('menu')->name('menu.')->group(function () {
             Route::get('/', [MenuController::class, 'index'])->name('index');
-            Route::get('/create', [MenuController::class, 'create'])->name('create');
-            Route::post('/store', [MenuController::class, 'store'])->name('store');
-            Route::get('/edit/{menu}', [MenuController::class, 'edit'])->name('edit');
-            Route::put('/update/{menu}', [MenuController::class, 'update'])->name('update');
-            Route::delete('/delete/{menu}', [MenuController::class, 'destroy'])->name('delete');
+
+            Route::middleware('owner')->group(function () {
+                Route::get('/create', [MenuController::class, 'create'])->name('create');
+                Route::post('/store', [MenuController::class, 'store'])->name('store');
+                Route::get('/edit/{menu}', [MenuController::class, 'edit'])->name('edit');
+                Route::put('/update/{menu}', [MenuController::class, 'update'])->name('update');
+                Route::delete('/delete/{menu}', [MenuController::class, 'destroy'])->name('delete');
+            });
         });
 
 
@@ -226,12 +245,15 @@ Route::middleware('auth')
         */
 
         Route::prefix('stock')->name('stock.')->group(function () {
-            Route::get('/create', [StockController::class, 'create'])->name('create');
-            Route::get('/edit/{id}', [StockController::class, 'edit'])->name('edit');
             Route::get('/', [StockController::class, 'index'])->name('index');
-            Route::post('/', [StockController::class, 'store'])->name('store');
-            Route::put('/{id}', [StockController::class, 'update'])->name('update');
-            Route::delete('/{id}', [StockController::class, 'destroy'])->name('delete');
+
+            Route::middleware('owner')->group(function () {
+                Route::get('/create', [StockController::class, 'create'])->name('create');
+                Route::get('/edit/{id}', [StockController::class, 'edit'])->name('edit');
+                Route::post('/', [StockController::class, 'store'])->name('store');
+                Route::put('/{id}', [StockController::class, 'update'])->name('update');
+                Route::delete('/{id}', [StockController::class, 'destroy'])->name('delete');
+            });
         });
 
     });

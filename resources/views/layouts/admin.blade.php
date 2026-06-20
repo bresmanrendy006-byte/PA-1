@@ -25,7 +25,7 @@
 
 <div class="admin-layout">
 
-    @include('admin.sidebar')
+    @include('partials.admin.sidebar')
 
     <main class="main-content">
         @yield('content')

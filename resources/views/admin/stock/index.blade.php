@@ -4,83 +4,6 @@
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('plugins/adminCSS/manajemenstok.css') }}">
-<style>
-    /* Layout Dashboard Baru */
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        gap: 20px;
-        margin-top: 30px;
-    }
-
-    .chart-card {
-        background: #ffffff;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        border: 1px solid #f0f0f0;
-    }
-
-    .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .card-header h3 {
-        font-size: 16px;
-        font-weight: 700;
-        color: #333;
-        margin: 0;
-    }
-
-    .card-header select {
-        padding: 5px 10px;
-        border-radius: 6px;
-        border: 1px solid #ddd;
-        font-size: 12px;
-        color: #666;
-    }
-
-    /* Penyesuaian Legend untuk Chart Donat (Mirip referensi) */
-    .donut-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        gap: 15px;
-    }
-
-    .custom-legend {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        font-size: 13px;
-    }
-
-    .legend-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 8px;
-    }
-
-    .legend-color {
-        width: 12px;
-        height: 12px;
-        border-radius: 3px;
-        margin-right: 10px;
-    }
-
-    .legend-text {
-        color: #555;
-        flex-grow: 1;
-    }
-
-    .legend-value {
-        font-weight: bold;
-        margin-left: 15px;
-    }
-</style>
 @endpush
 
 @section('content')
@@ -88,8 +11,12 @@
 <div class="stock-container">
     <div class="stock-header">
         <h1 class="stock-title">Manajemen Stok Bahan Baku</h1>
-        <a href="{{ route('admin.stock.create') }}" class="btn-add">+ Tambah Stok</a>
-    </div>
+        @if(Auth::user()->role === 'owner')
+            <a href="{{ route('admin.stock.create') }}" class="btn-add">
+                + Tambah Stok
+            </a>
+        @endif    
+</div>
 
     {{-- Notifikasi --}}
     @if(session('success'))
@@ -105,7 +32,9 @@
                     <th>Nama Bahan</th>
                     <th>Jumlah</th>
                     <th>Satuan</th>
-                    <th>Aksi</th>
+                    @if(Auth::user()->role === 'owner')
+                        <th>Aksi</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -115,13 +44,24 @@
                     <td>{{ $stock->name }}</td>
                     <td>{{ $stock->quantity }}</td>
                     <td>{{ $stock->unit }}</td>
+                    @if(Auth::user()->role === 'owner')
                     <td class="stock-action">
-                        <a href="{{ route('admin.stock.edit', $stock->id) }}" class="btn-edit">Edit</a>
-                        <button class="btn-hapus btn-delete" data-url="{{ route('admin.stock.delete', $stock->id) }}" data-item-name="{{ $stock->name }}">Hapus</button>
+                        <a href="{{ route('admin.stock.edit', $stock->id) }}"
+                        class="btn-edit">
+                        Edit
+                        </a>
+
+                        <button class="btn-hapus btn-delete"
+                            data-url="{{ route('admin.stock.delete', $stock->id) }}"
+                            data-item-name="{{ $stock->name }}">
+                            Hapus
+                        </button>
                     </td>
+                    @endif
                 </tr>
                 @empty
-                <tr><td colspan="5" class="empty-text">Belum ada stok ditambahkan</td></tr>
+                <tr><td colspan="{{ Auth::user()->role === 'owner' ? 5 : 4 }}"
+                    class="empty-text">Belum ada stok ditambahkan</td></tr>
                 @endforelse
             </tbody>
         </table>

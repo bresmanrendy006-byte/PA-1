@@ -28,12 +28,15 @@
             @csrf
 
             <div class="form-group">
+            <div class="form-group">
                 <label>Nama Bahan</label>
                 <input
                     type="text"
                     name="name"
                     value="{{ old('name') }}"
                     placeholder="Contoh: Kopi Arabika"
+                    pattern="[A-Za-z\s]+"
+                    title="Nama bahan hanya boleh berisi huruf"
                     required>
             </div>
 
@@ -50,12 +53,12 @@
 
             <div class="form-group">
                 <label>Satuan</label>
-                <input
-                    type="text"
-                    name="unit"
-                    value="{{ old('unit') }}"
-                    placeholder="Contoh: kg / liter / pcs"
-                    required>
+                <select name="unit" required>
+                    <option value="" disabled selected>Pilih Satuan</option>
+                    <option value="kg" {{ old('unit') == 'kg' ? 'selected' : '' }}>kg</option>
+                    <option value="liter" {{ old('unit') == 'liter' ? 'selected' : '' }}>liter</option>
+                    <option value="pcs" {{ old('unit') == 'pcs' ? 'selected' : '' }}>pcs</option>
+                </select>
             </div>
 
             <div class="form-actions">

@@ -57,6 +57,13 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
 
             if (data.success) {
+                // Koreksi input ke angka final dari server (misal kena capping
+                // batas maksimal per menu). Wajib dilakukan SEBELUM refreshTotal()
+                // karena refreshTotal() membaca ulang input.value untuk hitung totalItems.
+                if (data.quantity !== undefined) {
+                    input.value = data.quantity;
+                }
+
                 // Update subtotal baris ini
                 const subtotalEl = document.querySelector(`.subtotal-${cartId}`);
                 if (subtotalEl && data.subtotal) {
@@ -75,6 +82,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     showAlert('success', data.message);
                 }
             } else {
+                // Request gagal di server (misal limit per menu sudah tercapai
+                // dan tidak ada penyesuaian yang bisa dilakukan). Kembalikan
+                // input ke nilai sebelumnya supaya tidak menampilkan angka salah.
+                if (data.quantity !== undefined) {
+                    input.value = data.quantity;
+                }
                 showAlert('danger', data.message || 'Gagal memperbarui jumlah.');
             }
 

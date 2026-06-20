@@ -39,8 +39,8 @@ Customer : {{ $order->user->username }}
 Tanggal : {{ $order->created_at->format('d M Y H:i') }}
 </div>
 
-<div class="order-status confirmed">
-Status : Selesai
+<div class="order-status {{ $order->status }}">
+Status : {{ $order->status_label }}
 </div>
 
 </div>
