@@ -26,7 +26,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('guest.menu') }}">Menu</a>
+                    <a href="{{ route('guest.menu') }}">Menu Minuman</a>
                 </li>
 
                 <li>

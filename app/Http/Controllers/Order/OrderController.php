@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Stock;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -51,6 +52,23 @@ class OrderController extends Controller
                 ->with('error', 'Total item di keranjang melebihi batas maksimal 50. Mohon sesuaikan jumlahnya sebelum checkout.');
         }
 
+        // Cek ketersediaan stok sebelum transaksi dimulai
+        foreach ($carts as $cart) {
+            $stock = Stock::where('menu_id', $cart->menu_id)->first();
+
+            if (!$stock) {
+                return redirect()
+                    ->route('cart.index')
+                    ->with('error', "Menu \"{$cart->menu->name}\" belum memiliki stok. Hubungi pihak kedai.");
+            }
+
+            if ($stock->quantity < $cart->quantity) {
+                return redirect()
+                    ->route('cart.index')
+                    ->with('error', "Stok \"{$cart->menu->name}\" tidak mencukupi. Stok tersedia: {$stock->quantity} porsi.");
+            }
+        }
+
         DB::beginTransaction();
 
         try {
@@ -69,6 +87,10 @@ class OrderController extends Controller
                     'quantity' => $cart->quantity,
                     'price'    => $cart->menu->price,
                 ]);
+
+                // Kurangi stok otomatis saat checkout
+                Stock::where('menu_id', $cart->menu_id)
+                    ->decrement('quantity', $cart->quantity);
             }
 
             Cart::where('user_id', $userId)->delete();
@@ -125,6 +147,8 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     | 4. Edit Pesanan → Kembalikan ke Cart
     |--------------------------------------------------------------------------
+    | Stok dikembalikan karena order pending dibatalkan untuk diedit ulang.
+    |--------------------------------------------------------------------------
     */
 
     public function editToCart($id)
@@ -151,6 +175,10 @@ class OrderController extends Controller
                     'quantity' => $item->quantity,
                     'notes'    => null,
                 ]);
+
+                // Kembalikan stok karena order dibatalkan untuk diedit
+                Stock::where('menu_id', $item->menu_id)
+                    ->increment('quantity', $item->quantity);
             }
 
             $order->delete();
@@ -176,18 +204,41 @@ class OrderController extends Controller
     |--------------------------------------------------------------------------
     | 5. Cancel Order
     |--------------------------------------------------------------------------
+    | Stok dikembalikan karena customer membatalkan order pending.
+    |--------------------------------------------------------------------------
     */
 
     public function cancel($id)
     {
-        $order = Order::where('user_id', Auth::id())
+        $order = Order::with('items')
+            ->where('user_id', Auth::id())
             ->findOrFail($id);
 
         if ($order->status !== Order::STATUS_PENDING) {
             return back()->with('error', 'Pesanan tidak bisa dibatalkan.');
         }
 
-        $order->delete();
+        DB::beginTransaction();
+
+        try {
+            // Kembalikan stok untuk setiap item yang dibatalkan
+            foreach ($order->items as $item) {
+                Stock::where('menu_id', $item->menu_id)
+                    ->increment('quantity', $item->quantity);
+            }
+
+            $order->delete();
+
+            DB::commit();
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Cancel order failed: ' . $e->getMessage(), [
+                'user_id'  => Auth::id(),
+                'order_id' => $id,
+            ]);
+            return back()->with('error', 'Gagal membatalkan pesanan.');
+        }
 
         return redirect()
             ->route('orders.index')
@@ -216,5 +267,4 @@ class OrderController extends Controller
             ->route('orders.index')
             ->with('success', 'Pesanan berhasil dihapus.');
     }
-
 }

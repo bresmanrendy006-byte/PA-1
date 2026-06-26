@@ -10,7 +10,7 @@
 
 <section class="about-hero">
     <div>
-        <h1>Tentang Kedanku Coffee</h1>
+        <h1>Profile Kedanku Coffee</h1>
         <p>Premium Coffee Experience in Balige</p>
     </div>
 </section>
@@ -23,15 +23,15 @@
             {{-- STATS --}}
             <div class="about-stats">
                 <div class="about-stat">
-                    <div class="about-stat-num">2019</div>
+                    <div class="about-stat-num">2025</div>
                     <div class="about-stat-label">Berdiri sejak</div>
                 </div>
                 <div class="about-stat">
-                    <div class="about-stat-num">50+</div>
+                    <div class="about-stat-num">20</div>
                     <div class="about-stat-label">Menu minuman</div>
                 </div>
                 <div class="about-stat">
-                    <div class="about-stat-num">4.9★</div>
+                    <div class="about-stat-num">4.5★</div>
                     <div class="about-stat-label">Rating pelanggan</div>
                 </div>
             </div>

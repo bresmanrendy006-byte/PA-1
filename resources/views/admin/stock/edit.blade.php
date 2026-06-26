@@ -10,7 +10,7 @@
 
 <div class="stock-container">
 
-    <h1 class="stock-title">Edit Stok Bahan Baku</h1>
+    <h1 class="stock-title">Edit Stok Menu</h1>
 
     @if($errors->any())
         <div class="alert alert-danger">
@@ -28,37 +28,25 @@
             @csrf
             @method('PUT')
 
+            {{-- Nama menu hanya ditampilkan, tidak bisa diubah --}}
             <div class="form-group">
-                <label>Nama Bahan</label>
+                <label>Menu</label>
                 <input
                     type="text"
-                    name="name"
-                    value="{{ old('name', $stock->name) }}"
-                    placeholder="Contoh: Kopi Arabika"
-                    pattern="[A-Za-z\s]+"
-                    title="Nama bahan hanya boleh berisi huruf"
-                    required>
+                    value="{{ $stock->menu->name }}"
+                    disabled
+                    style="background-color: #f5f5f5; cursor: not-allowed;">
             </div>
 
             <div class="form-group">
-                <label>Jumlah Stok</label>
+                <label>Jumlah Stok (Porsi)</label>
                 <input
                     type="number"
                     name="quantity"
                     value="{{ old('quantity', $stock->quantity) }}"
-                    placeholder="Contoh: 100"
+                    placeholder="Contoh: 50"
                     min="0"
                     required>
-            </div>
-
-            <div class="form-group">
-                <label>Satuan</label>
-                <select name="unit" required>
-                    <option value="" disabled>Pilih Satuan</option>
-                    <option value="kg" {{ old('unit', $stock->unit) == 'kg' ? 'selected' : '' }}>kg</option>
-                    <option value="liter" {{ old('unit', $stock->unit) == 'liter' ? 'selected' : '' }}>liter</option>
-                    <option value="pcs" {{ old('unit', $stock->unit) == 'pcs' ? 'selected' : '' }}>pcs</option>
-                </select>
             </div>
 
             <div class="form-actions">

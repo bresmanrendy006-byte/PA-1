@@ -40,23 +40,13 @@
             </div>
         </div>
 
-        <div class="home-order-btn">
-            {{--
-                FIX: tag <a> tidak boleh dibuka di dalam @auth dan ditutup di luar.
-                Tentukan href dulu, baru render tag <a> sekali.
-            --}}
-            @auth
-                @php $orderUrl = route('guest.menu') @endphp
-            @else
-                @php $orderUrl = route('login') @endphp
-            @endauth
-
-            <a href="{{ $orderUrl }}" class="home-order-now-button">
-                <i class="fas fa-mug-hot home-coffee-icon"></i>
-                <span>Pesan Sekarang</span>
-                <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
+    <div class="home-order-btn">
+        <a href="{{ auth()->check() ? route('guest.menu') : route('login') }}" class="home-order-now-button">
+            <i class="fas fa-mug-hot home-coffee-icon"></i>
+            <span>Pesan Sekarang</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
 
     </div>
 

@@ -66,4 +66,20 @@ class User extends Authenticatable
         {
             return $this->hasMany(Order::class);
         }
+    // Tambahkan method berikut ke app/Models/User.php
+
+public function profile()
+{
+    return $this->hasOne(Profile::class);
+}
+
+public function homeImages()
+{
+    return $this->hasMany(HomeImage::class);
+}
+
+public function stocks()
+{
+    return $this->hasMany(Stock::class);
+}
 }

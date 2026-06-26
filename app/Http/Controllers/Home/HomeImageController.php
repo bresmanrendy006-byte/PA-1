@@ -29,7 +29,10 @@ class HomeImageController extends Controller
         try {
             $path = $this->uploadImage($request);
 
-            HomeImage::create(['image' => $path]);
+            HomeImage::create([
+                'user_id' => auth()->id(),
+                'image'   => $path,
+            ]);
 
             return back()->with('success', 'Gambar berhasil ditambahkan.');
 

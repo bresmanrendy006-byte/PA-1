@@ -10,7 +10,7 @@
 
 <div class="stock-container">
 
-    <h1 class="stock-title">Tambah Stok Bahan Baku</h1>
+    <h1 class="stock-title">Tambah Stok Menu</h1>
 
     @if($errors->any())
         <div class="alert alert-danger">
@@ -28,37 +28,26 @@
             @csrf
 
             <div class="form-group">
-            <div class="form-group">
-                <label>Nama Bahan</label>
-                <input
-                    type="text"
-                    name="name"
-                    value="{{ old('name') }}"
-                    placeholder="Contoh: Kopi Arabika"
-                    pattern="[A-Za-z\s]+"
-                    title="Nama bahan hanya boleh berisi huruf"
-                    required>
+                <label>Pilih Menu</label>
+                <select name="menu_id" required>
+                    <option value="" disabled selected>-- Pilih Menu --</option>
+                    @foreach($menus as $menu)
+                        <option value="{{ $menu->id }}" {{ old('menu_id') == $menu->id ? 'selected' : '' }}>
+                            {{ $menu->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="form-group">
-                <label>Jumlah Stok</label>
+                <label>Jumlah Stok (Porsi)</label>
                 <input
                     type="number"
                     name="quantity"
                     value="{{ old('quantity') }}"
-                    placeholder="Contoh: 100"
+                    placeholder="Contoh: 50"
                     min="0"
                     required>
-            </div>
-
-            <div class="form-group">
-                <label>Satuan</label>
-                <select name="unit" required>
-                    <option value="" disabled selected>Pilih Satuan</option>
-                    <option value="kg" {{ old('unit') == 'kg' ? 'selected' : '' }}>kg</option>
-                    <option value="liter" {{ old('unit') == 'liter' ? 'selected' : '' }}>liter</option>
-                    <option value="pcs" {{ old('unit') == 'pcs' ? 'selected' : '' }}>pcs</option>
-                </select>
             </div>
 
             <div class="form-actions">

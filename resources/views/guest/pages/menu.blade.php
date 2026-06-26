@@ -43,7 +43,7 @@
                     {{-- ADD TO CART --}}
                     @auth
 
-                        @if(!isset($menu->stock) || $menu->stock > 0)
+                        @if($menu->stock && $menu->stock->quantity > 0)
 
                             <form
                                 action="{{ route('cart.add', $menu->id) }}"
@@ -58,6 +58,7 @@
                                         name="quantity"
                                         value="1"
                                         min="1"
+                                        max="{{ $menu->stock->quantity }}"
                                         class="qty-input"
                                     >
                                 </div>
@@ -108,7 +109,7 @@
 
                             <button class="btn-add-cart btn-stok-habis" disabled>
                                 <i class="fas fa-times-circle"></i>
-                                Stok Habis
+                                Stok Sedang Habis
                             </button>
 
                         @endif
